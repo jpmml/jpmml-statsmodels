@@ -7,6 +7,7 @@ Java library and command-line application for converting [StatsModels](https://w
 
 * Supported model types:
   * Ordinary Least Squares (OLS)
+  * Weighted Least Squares (WLS)
 * Production quality:
   * Complete test coverage.
   * Fully compliant with the [JPMML-Evaluator](https://github.com/jpmml/jpmml-evaluator) library.

@@ -1,6 +1,6 @@
 from pandas import DataFrame
-from statsmodels.api import OLS
-from statsmodels.formula.api import ols
+from statsmodels.api import OLS, WLS
+from statsmodels.formula.api import ols, wls
 
 import pandas
 
@@ -35,3 +35,5 @@ def build_auto(model, name):
 
 build_auto(OLS(auto_y, auto_X), "OLSAuto")
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaAuto")
+build_auto(WLS(auto_y, auto_X), "WLSAuto")
+build_auto(wls(formula = auto_formula, data = auto_df), "WLSFormulaAuto")

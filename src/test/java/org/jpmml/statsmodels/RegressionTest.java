@@ -31,4 +31,14 @@ public class RegressionTest extends StatsModelsTest {
 	public void evaluateOLSFormulaAuto() throws Exception {
 		evaluate("OLSFormula", "Auto");
 	}
+
+	@Test
+	public void evaluateWLSAuto() throws Exception {
+		evaluate("WLS", "Auto");
+	}
+
+	@Test
+	public void evaluateWLSFormulaAuto() throws Exception {
+		evaluate("WLSFormula", "Auto");
+	}
 }
