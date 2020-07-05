@@ -18,21 +18,13 @@
  */
 package org.jpmml.statsmodels;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.function.Predicate;
 
 import com.google.common.base.Equivalence;
-import org.dmg.pmml.PMML;
 import org.jpmml.evaluator.ResultField;
 import org.jpmml.evaluator.testing.Batch;
 import org.jpmml.evaluator.testing.IntegrationTest;
-import org.jpmml.evaluator.testing.IntegrationTestBatch;
 import org.jpmml.evaluator.testing.PMMLEquivalence;
-import org.jpmml.python.InputStreamStorage;
-import org.jpmml.python.PickleUtil;
-import org.jpmml.python.Storage;
-import statsmodels.regression.RegressionResultsWrapper;
 
 abstract
 public class StatsModelsTest extends IntegrationTest {
@@ -43,34 +35,11 @@ public class StatsModelsTest extends IntegrationTest {
 
 	@Override
 	protected Batch createBatch(String name, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
-		Batch result = new IntegrationTestBatch(name, dataset, predicate, equivalence){
+		Batch result = new StatsModelsTestBatch(name, dataset, predicate, equivalence){
 
 			@Override
-			public IntegrationTest getIntegrationTest(){
+			public StatsModelsTest getIntegrationTest(){
 				return StatsModelsTest.this;
-			}
-
-			@Override
-			public PMML getPMML() throws Exception {
-				StatsModelsEncoder encoder = new StatsModelsEncoder();
-
-				RegressionResultsWrapper resultsWrapper;
-
-				try(Storage storage = openStorage("/pkl/" + getName() + getDataset() + ".pkl")){
-					resultsWrapper = (RegressionResultsWrapper)PickleUtil.unpickle(storage);
-				}
-
-				PMML pmml = resultsWrapper.encodePMML(encoder);
-
-				validatePMML(pmml);
-
-				return pmml;
-			}
-
-			private Storage openStorage(String path) throws IOException {
-				InputStream is = open(path);
-
-				return new InputStreamStorage(is);
 			}
 		};
 
