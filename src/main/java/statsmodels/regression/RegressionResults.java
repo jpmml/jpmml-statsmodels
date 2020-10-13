@@ -25,6 +25,7 @@ import org.dmg.pmml.Model;
 import org.dmg.pmml.PMML;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
+import org.jpmml.converter.PMMLEncoder;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
 import org.jpmml.python.PythonObject;
@@ -54,6 +55,7 @@ public class RegressionResults extends PythonObject {
 		List<Number> params = getParams();
 		Number intercept = 0d;
 
+		PMMLEncoder encoder = schema.getEncoder();
 		Label label = schema.getLabel();
 		List<? extends Feature> features = schema.getFeatures();
 
@@ -69,7 +71,7 @@ public class RegressionResults extends PythonObject {
 				features = new ArrayList<>(features);
 				features.remove(0);
 
-				schema = new Schema(label, features);
+				schema = new Schema(encoder, label, features);
 			}
 		}
 

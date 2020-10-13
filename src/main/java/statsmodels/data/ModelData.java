@@ -112,7 +112,7 @@ public class ModelData extends PythonObject {
 			}
 		}
 
-		return new Schema(label, features);
+		return new Schema(encoder, label, features);
 	}
 
 	public Cache getCache(){
