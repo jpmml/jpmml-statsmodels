@@ -1,4 +1,4 @@
-JPMML-StatsModels
+JPMML-StatsModels [![Build Status](https://github.com/jpmml/jpmml-statsmodels/workflows/maven/badge.svg)](https://github.com/jpmml/jpmml-statsmodels/actions?query=workflow%3A%22maven%22)
 =================
 
 Java library and command-line application for converting [StatsModels](https://www.statsmodels.org/) models to PMML.
