@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>org.jpmml</groupId>
 			<artifactId>jpmml-python</artifactId>
-			<version>1.0.13</version>
+			<version>1.0.15</version>
 		</dependency>
 
 		<dependency>
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>org.jpmml</groupId>
 			<artifactId>pmml-evaluator-testing</artifactId>
-			<version>1.5.14</version>
+			<version>1.5.15</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
