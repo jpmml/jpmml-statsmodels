@@ -32,15 +32,15 @@ import org.jpmml.python.testing.PythonEncoderBatch;
 import statsmodels.regression.RegressionResultsWrapper;
 
 abstract
-public class StatsModelsTestBatch extends PythonEncoderBatch {
+public class StatsModelsEncoderBatch extends PythonEncoderBatch {
 
-	public StatsModelsTestBatch(String algorithm, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
+	public StatsModelsEncoderBatch(String algorithm, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
 		super(algorithm, dataset, predicate, equivalence);
 	}
 
 	@Override
 	abstract
-	public StatsModelsTest getArchiveBatchTest();
+	public StatsModelsEncoderBatchTest getArchiveBatchTest();
 
 	@Override
 	public PMML getPMML() throws Exception {

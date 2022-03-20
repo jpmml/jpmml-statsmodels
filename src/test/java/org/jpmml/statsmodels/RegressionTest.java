@@ -21,7 +21,7 @@ package org.jpmml.statsmodels;
 import org.jpmml.converter.testing.Datasets;
 import org.junit.Test;
 
-public class RegressionTest extends StatsModelsTest implements Datasets {
+public class RegressionTest extends StatsModelsEncoderBatchTest implements Datasets {
 
 	@Test
 	public void evaluateOLSAuto() throws Exception {

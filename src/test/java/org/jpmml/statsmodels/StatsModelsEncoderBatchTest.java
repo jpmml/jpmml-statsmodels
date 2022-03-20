@@ -26,19 +26,19 @@ import org.jpmml.evaluator.testing.PMMLEquivalence;
 import org.jpmml.python.testing.PythonEncoderBatchTest;
 
 abstract
-public class StatsModelsTest extends PythonEncoderBatchTest {
+public class StatsModelsEncoderBatchTest extends PythonEncoderBatchTest {
 
-	public StatsModelsTest(){
+	public StatsModelsEncoderBatchTest(){
 		super(new PMMLEquivalence(1e-13, 1e-13));
 	}
 
 	@Override
-	public StatsModelsTestBatch createBatch(String algorithm, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
-		StatsModelsTestBatch result = new StatsModelsTestBatch(algorithm, dataset, predicate, equivalence){
+	public StatsModelsEncoderBatch createBatch(String algorithm, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
+		StatsModelsEncoderBatch result = new StatsModelsEncoderBatch(algorithm, dataset, predicate, equivalence){
 
 			@Override
-			public StatsModelsTest getArchiveBatchTest(){
-				return StatsModelsTest.this;
+			public StatsModelsEncoderBatchTest getArchiveBatchTest(){
+				return StatsModelsEncoderBatchTest.this;
 			}
 		};
 
