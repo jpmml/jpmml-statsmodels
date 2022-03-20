@@ -22,23 +22,22 @@ import java.util.function.Predicate;
 
 import com.google.common.base.Equivalence;
 import org.jpmml.evaluator.ResultField;
-import org.jpmml.evaluator.testing.Batch;
-import org.jpmml.evaluator.testing.IntegrationTest;
 import org.jpmml.evaluator.testing.PMMLEquivalence;
+import org.jpmml.python.testing.PythonEncoderBatchTest;
 
 abstract
-public class StatsModelsTest extends IntegrationTest {
+public class StatsModelsTest extends PythonEncoderBatchTest {
 
 	public StatsModelsTest(){
 		super(new PMMLEquivalence(1e-13, 1e-13));
 	}
 
 	@Override
-	protected Batch createBatch(String name, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
-		Batch result = new StatsModelsTestBatch(name, dataset, predicate, equivalence){
+	public StatsModelsTestBatch createBatch(String algorithm, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
+		StatsModelsTestBatch result = new StatsModelsTestBatch(algorithm, dataset, predicate, equivalence){
 
 			@Override
-			public StatsModelsTest getIntegrationTest(){
+			public StatsModelsTest getArchiveBatchTest(){
 				return StatsModelsTest.this;
 			}
 		};

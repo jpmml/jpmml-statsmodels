@@ -24,6 +24,8 @@ import org.jpmml.python.PythonEncoder;
 public class StatsModelsEncoder extends PythonEncoder {
 
 	static {
-		PickleUtil.init("statsmodels2pmml.properties");
+		ClassLoader clazzLoader = StatsModelsEncoder.class.getClassLoader();
+
+		PickleUtil.init(clazzLoader, "statsmodels2pmml.properties");
 	}
 }

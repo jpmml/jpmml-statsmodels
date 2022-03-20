@@ -25,38 +25,42 @@ import java.util.function.Predicate;
 import com.google.common.base.Equivalence;
 import org.dmg.pmml.PMML;
 import org.jpmml.evaluator.ResultField;
-import org.jpmml.evaluator.testing.IntegrationTestBatch;
 import org.jpmml.python.InputStreamStorage;
 import org.jpmml.python.PickleUtil;
 import org.jpmml.python.Storage;
+import org.jpmml.python.testing.PythonEncoderBatch;
 import statsmodels.regression.RegressionResultsWrapper;
 
 abstract
-public class StatsModelsTestBatch extends IntegrationTestBatch {
+public class StatsModelsTestBatch extends PythonEncoderBatch {
 
-	public StatsModelsTestBatch(String name, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
-		super(name, dataset, predicate, equivalence);
+	public StatsModelsTestBatch(String algorithm, String dataset, Predicate<ResultField> predicate, Equivalence<Object> equivalence){
+		super(algorithm, dataset, predicate, equivalence);
 	}
 
 	@Override
 	abstract
-	public StatsModelsTest getIntegrationTest();
+	public StatsModelsTest getArchiveBatchTest();
 
 	@Override
 	public PMML getPMML() throws Exception {
 		StatsModelsEncoder encoder = new StatsModelsEncoder();
 
-		RegressionResultsWrapper resultsWrapper;
-
-		try(Storage storage = openStorage("/pkl/" + getName() + getDataset() + ".pkl")){
-			resultsWrapper = (RegressionResultsWrapper)PickleUtil.unpickle(storage);
-		}
+		RegressionResultsWrapper resultsWrapper = (RegressionResultsWrapper)loadPickle();
 
 		PMML pmml = resultsWrapper.encodePMML(encoder);
 
 		validatePMML(pmml);
 
 		return pmml;
+	}
+
+	@Override
+	public Object loadPickle() throws IOException {
+
+		try(Storage storage = openStorage(getPklPath())){
+			return PickleUtil.unpickle(storage);
+		}
 	}
 
 	private Storage openStorage(String path) throws IOException {

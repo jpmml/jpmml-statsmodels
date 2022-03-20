@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import com.google.common.collect.Iterables;
 import org.dmg.pmml.DataField;
 import org.dmg.pmml.DataType;
-import org.dmg.pmml.FieldName;
 import org.dmg.pmml.OpType;
 import org.jpmml.converter.BinaryFeature;
 import org.jpmml.converter.ContinuousFeature;
@@ -58,7 +57,7 @@ public class ModelData extends PythonObject {
 		{
 			String yname = Iterables.getOnlyElement(ynames);
 
-			DataField dataField = encoder.createDataField(FieldName.create(yname), OpType.CONTINUOUS, DataType.DOUBLE);
+			DataField dataField = encoder.createDataField(yname, OpType.CONTINUOUS, DataType.DOUBLE);
 
 			label = new ContinuousLabel(dataField);
 		}
@@ -79,7 +78,7 @@ public class ModelData extends PythonObject {
 				if(interceptMatcher.matches()){
 					hasIntercept = true;
 
-					features.add(new InterceptFeature(encoder, FieldName.create(xname), DataType.DOUBLE));
+					features.add(new InterceptFeature(encoder, xname, DataType.DOUBLE));
 
 					continue;
 				}
@@ -92,9 +91,9 @@ public class ModelData extends PythonObject {
 					String name = binaryIndicatorMatcher.group(1);
 					String value = binaryIndicatorMatcher.group(2);
 
-					DataField dataField = encoder.getDataField(FieldName.create(name));
+					DataField dataField = encoder.getDataField(name);
 					if(dataField == null){
-						dataField = encoder.createDataField(FieldName.create(name), OpType.CATEGORICAL, DataType.STRING);
+						dataField = encoder.createDataField(name, OpType.CATEGORICAL, DataType.STRING);
 					} // End if
 
 					if(!hasIntercept){
@@ -105,7 +104,7 @@ public class ModelData extends PythonObject {
 				} else
 
 				{
-					DataField dataField = encoder.createDataField(FieldName.create(xname), OpType.CONTINUOUS, DataType.DOUBLE);
+					DataField dataField = encoder.createDataField(xname, OpType.CONTINUOUS, DataType.DOUBLE);
 
 					features.add(new ContinuousFeature(encoder, dataField));
 				}

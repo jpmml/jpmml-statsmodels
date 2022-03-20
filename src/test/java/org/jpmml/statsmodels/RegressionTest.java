@@ -18,27 +18,28 @@
  */
 package org.jpmml.statsmodels;
 
+import org.jpmml.converter.testing.Datasets;
 import org.junit.Test;
 
-public class RegressionTest extends StatsModelsTest {
+public class RegressionTest extends StatsModelsTest implements Datasets {
 
 	@Test
 	public void evaluateOLSAuto() throws Exception {
-		evaluate("OLS", "Auto");
+		evaluate("OLS", AUTO);
 	}
 
 	@Test
 	public void evaluateOLSFormulaAuto() throws Exception {
-		evaluate("OLSFormula", "Auto");
+		evaluate("OLSFormula", AUTO);
 	}
 
 	@Test
 	public void evaluateWLSAuto() throws Exception {
-		evaluate("WLS", "Auto");
+		evaluate("WLS", AUTO);
 	}
 
 	@Test
 	public void evaluateWLSFormulaAuto() throws Exception {
-		evaluate("WLSFormula", "Auto");
+		evaluate("WLSFormula", AUTO);
 	}
 }
