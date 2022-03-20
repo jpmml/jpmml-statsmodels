@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpmml.statsmodels;
+package org.jpmml.statsmodels.testing;
 
 import java.util.function.Predicate;
 

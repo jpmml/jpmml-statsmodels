@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpmml.statsmodels;
+package org.jpmml.statsmodels.testing;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +29,7 @@ import org.jpmml.python.InputStreamStorage;
 import org.jpmml.python.PickleUtil;
 import org.jpmml.python.Storage;
 import org.jpmml.python.testing.PythonEncoderBatch;
+import org.jpmml.statsmodels.StatsModelsEncoder;
 import statsmodels.regression.RegressionResultsWrapper;
 
 abstract
