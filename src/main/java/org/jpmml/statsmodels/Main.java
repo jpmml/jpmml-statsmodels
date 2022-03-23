@@ -30,6 +30,7 @@ import org.jpmml.model.metro.MetroJAXBUtil;
 import org.jpmml.python.ClassDictUtil;
 import org.jpmml.python.PickleUtil;
 import org.jpmml.python.Storage;
+import org.jpmml.python.StorageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import statsmodels.regression.RegressionResultsWrapper;
@@ -98,7 +99,7 @@ public class Main {
 
 		Object object;
 
-		try(Storage storage = PickleUtil.createStorage(this.input)){
+		try(Storage storage = StorageUtil.createStorage(this.input)){
 			logger.info("Parsing PKL..");
 
 			long begin = System.currentTimeMillis();

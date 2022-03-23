@@ -18,16 +18,11 @@
  */
 package org.jpmml.statsmodels.testing;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.function.Predicate;
 
 import com.google.common.base.Equivalence;
 import org.dmg.pmml.PMML;
 import org.jpmml.evaluator.ResultField;
-import org.jpmml.python.InputStreamStorage;
-import org.jpmml.python.PickleUtil;
-import org.jpmml.python.Storage;
 import org.jpmml.python.testing.PythonEncoderBatch;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import statsmodels.regression.RegressionResultsWrapper;
@@ -47,26 +42,12 @@ public class StatsModelsEncoderBatch extends PythonEncoderBatch {
 	public PMML getPMML() throws Exception {
 		StatsModelsEncoder encoder = new StatsModelsEncoder();
 
-		RegressionResultsWrapper resultsWrapper = (RegressionResultsWrapper)loadPickle();
+		RegressionResultsWrapper resultsWrapper = loadPickle(RegressionResultsWrapper.class);
 
 		PMML pmml = resultsWrapper.encodePMML(encoder);
 
 		validatePMML(pmml);
 
 		return pmml;
-	}
-
-	@Override
-	public Object loadPickle() throws IOException {
-
-		try(Storage storage = openStorage(getPklPath())){
-			return PickleUtil.unpickle(storage);
-		}
-	}
-
-	private Storage openStorage(String path) throws IOException {
-		InputStream is = open(path);
-
-		return new InputStreamStorage(is);
 	}
 }
