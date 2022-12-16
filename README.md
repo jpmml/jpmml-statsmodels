@@ -6,6 +6,7 @@ Java library and command-line application for converting [StatsModels](https://w
 # Features #
 
 * Supported model types:
+  * Logit
   * Ordinary Least Squares (OLS)
   * Weighted Least Squares (WLS)
 * Production quality:
