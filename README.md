@@ -6,9 +6,9 @@ Java library and command-line application for converting [StatsModels](https://w
 # Features #
 
 * Supported model types:
-  * Logit
-  * Ordinary Least Squares (OLS)
-  * Weighted Least Squares (WLS)
+  * [Logit](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Logit.html)
+  * [Ordinary Least Squares](https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.OLS.html)
+  * [Weighted Least Squares](https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.WLS.html)
 * Production quality:
   * Complete test coverage.
   * Fully compliant with the [JPMML-Evaluator](https://github.com/jpmml/jpmml-evaluator) library.
