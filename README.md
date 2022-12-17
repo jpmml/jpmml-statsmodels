@@ -8,6 +8,7 @@ Java library and command-line application for converting [StatsModels](https://w
 * Supported model types:
   * Regression with Discrete Dependent Variable:
     * [Logit](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Logit.html)
+    * [Multinomial Logit](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.MNLogit.html)
     * [Poisson](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Poisson.html)
   * Linear Regression:
     * [Ordinary Least Squares](https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.OLS.html)

@@ -1,5 +1,5 @@
 from pandas import DataFrame
-from statsmodels.api import Logit, OLS, WLS
+from statsmodels.api import MNLogit, OLS, WLS
 from statsmodels.formula.api import logit, ols, poisson, wls
 
 import pandas
@@ -35,6 +35,23 @@ def build_audit(model, name):
 	store_csv(adjusted_proba, name)
 
 build_audit(logit(formula = audit_formula, data = audit_df), "LogitFormulaAudit")
+
+iris_df = load_csv("Iris")
+print(iris_df.dtypes)
+
+iris_X, iris_y = split_csv(iris_df)
+
+def build_iris(model, name):
+	result = model.fit()
+	print(result.summary())
+
+	store_pkl(result, name)
+
+	species_proba = result.predict(iris_X)
+	species_proba.columns = ["probability(setosa)", "probability(versicolor)", "probability(virginica)"]
+	store_csv(species_proba, name)
+
+build_iris(MNLogit(iris_y, iris_X), "MNLogitIris")
 
 auto_df = load_csv("Auto")
 print(auto_df.dtypes)

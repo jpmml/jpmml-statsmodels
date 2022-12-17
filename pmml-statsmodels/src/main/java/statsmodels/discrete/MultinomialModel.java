@@ -16,21 +16,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpmml.statsmodels.testing;
+package statsmodels.discrete;
 
-import org.jpmml.converter.testing.Datasets;
-import org.jpmml.converter.testing.Fields;
-import org.junit.Test;
+import java.util.Map;
 
-public class ClassificationTest extends StatsModelsEncoderBatchTest implements Datasets, Fields {
+public class MultinomialModel extends DiscreteModel {
 
-	@Test
-	public void evaluateLogitFormulaAudit() throws Exception {
-		evaluate("LogitFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+	public MultinomialModel(String module, String name){
+		super(module, name);
 	}
 
-	@Test
-	public void evaluateMNLogitIris() throws Exception {
-		evaluate("MNLogit", IRIS, excludeFields(IRIS_SPECIES));
+	public Map<Integer, ?> getYNamesMap(){
+		return (Map)getDict("_ynames_map");
 	}
 }
