@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from statsmodels.api import Logit, OLS, WLS
-from statsmodels.formula.api import logit, ols, wls
+from statsmodels.formula.api import logit, ols, poisson, wls
 
 import pandas
 
@@ -56,3 +56,21 @@ build_auto(OLS(auto_y, auto_X), "OLSAuto")
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaAuto")
 build_auto(WLS(auto_y, auto_X), "WLSAuto")
 build_auto(wls(formula = auto_formula, data = auto_df), "WLSFormulaAuto")
+
+visit_df = load_csv("Visit")
+print(visit_df.dtypes)
+
+visit_X, visit_y = split_csv(visit_df)
+
+visit_formula = "docvis ~ C(edlevel) + C(outwork) + C(female) + C(married) + C(kids) + hhninc + educ + C(self)"
+
+def build_visit(model, name):
+	result = model.fit()
+	print(result.summary())
+
+	store_pkl(result, name)
+
+	docvis = DataFrame(result.predict(visit_X), columns = ["docvis"])
+	store_csv(docvis, name)
+
+build_visit(poisson(formula = visit_formula, data = visit_df), "PoissonFormulaVisit")

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Villu Ruusmann
+ * Copyright (c) 2022 Villu Ruusmann
  *
  * This file is part of JPMML-StatsModels
  *
@@ -16,35 +16,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpmml.statsmodels.testing;
+package statsmodels.discrete;
 
-import org.jpmml.converter.testing.Datasets;
-import org.junit.Test;
+import java.util.List;
 
-public class RegressionTest extends StatsModelsEncoderBatchTest implements Datasets {
+import org.dmg.pmml.regression.RegressionModel;
+import org.jpmml.converter.Feature;
+import org.jpmml.converter.Schema;
+import org.jpmml.converter.regression.RegressionModelUtil;
 
-	@Test
-	public void evaluateOLSAuto() throws Exception {
-		evaluate("OLS", AUTO);
+public class PoissonResults extends CountResults {
+
+	public PoissonResults(String module, String name){
+		super(module, name);
 	}
 
-	@Test
-	public void evaluateOLSFormulaAuto() throws Exception {
-		evaluate("OLSFormula", AUTO);
-	}
-
-	@Test
-	public void evaluateWLSAuto() throws Exception {
-		evaluate("WLS", AUTO);
-	}
-
-	@Test
-	public void evaluateWLSFormulaAuto() throws Exception {
-		evaluate("WLSFormula", AUTO);
-	}
-
-	@Test
-	public void evaluatePoissonFormulaVisit() throws Exception {
-		evaluate("PoissonFormula", VISIT);
+	@Override
+	public org.dmg.pmml.regression.RegressionModel createRegressionModel(List<? extends Feature> features, List<? extends Number> coefficients, Number intercept, Schema schema){
+		return RegressionModelUtil.createRegression(features, coefficients, intercept, RegressionModel.NormalizationMethod.EXP, schema);
 	}
 }
