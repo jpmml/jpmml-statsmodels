@@ -21,10 +21,11 @@ package org.jpmml.statsmodels;
 import org.dmg.pmml.DataType;
 import org.jpmml.converter.ContinuousFeature;
 import org.jpmml.converter.Feature;
+import org.jpmml.converter.PMMLEncoder;
 
 public class InterceptFeature extends Feature {
 
-	public InterceptFeature(StatsModelsEncoder encoder, String name, DataType dataType){
+	public InterceptFeature(PMMLEncoder encoder, String name, DataType dataType){
 		super(encoder, name, dataType);
 	}
 
