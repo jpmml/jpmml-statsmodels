@@ -29,6 +29,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	}
 
 	@Test
+	public void evaluateOLSConstAuto() throws Exception {
+		evaluate("OLSConst", AUTO);
+	}
+
+	@Test
 	public void evaluateOLSFormulaAuto() throws Exception {
 		evaluate("OLSFormula", AUTO);
 	}
@@ -36,6 +41,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	@Test
 	public void evaluateWLSAuto() throws Exception {
 		evaluate("WLS", AUTO);
+	}
+
+	@Test
+	public void evaluateWLSConstAuto() throws Exception {
+		evaluate("WLSConst", AUTO);
 	}
 
 	@Test

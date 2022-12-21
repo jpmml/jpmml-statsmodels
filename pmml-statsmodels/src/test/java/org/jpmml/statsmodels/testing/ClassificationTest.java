@@ -33,4 +33,9 @@ public class ClassificationTest extends StatsModelsEncoderBatchTest implements D
 	public void evaluateMNLogitIris() throws Exception {
 		evaluate("MNLogit", IRIS, excludeFields(IRIS_SPECIES));
 	}
+
+	@Test
+	public void evaluateMNLogitConstIris() throws Exception {
+		evaluate("MNLogitConst", IRIS, excludeFields(IRIS_SPECIES));
+	}
 }

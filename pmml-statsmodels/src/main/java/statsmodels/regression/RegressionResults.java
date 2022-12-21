@@ -84,21 +84,37 @@ public class RegressionResults extends PythonObject {
 	}
 
 	public List<Feature> encodeFeatures(List<String> xnames, StatsModelsEncoder encoder){
+		Integer kConstant = getKConstant();
+
 		List<Feature> features = new ArrayList<>();
 
 		Matcher interceptMatcher = RegressionResults.TERM_INTERCEPT.matcher("");
 		Matcher binaryIndicatorMatcher = RegressionResults.TERM_BINARY_INDICATOR.matcher("");
 
-		boolean hasIntercept = false;
+		boolean expectIntercept;
+
+		if(kConstant == 0){
+			expectIntercept = false;
+		} else
+
+		if(kConstant == 1){
+			expectIntercept = true;
+		} else
+
+		{
+			throw new IllegalArgumentException();
+		}
+
+		boolean isFormula = false;
 
 		for(int i = 0; i < xnames.size(); i++){
 			String xname = xnames.get(i);
 
-			if(i == 0){
+			if((i == 0) && (expectIntercept)){
 				interceptMatcher = interceptMatcher.reset(xname);
 
 				if(interceptMatcher.matches()){
-					hasIntercept = true;
+					isFormula = true;
 
 					features.add(new InterceptFeature(encoder, xname, DataType.DOUBLE));
 
@@ -118,7 +134,7 @@ public class RegressionResults extends PythonObject {
 						dataField = encoder.createDataField(name, OpType.CATEGORICAL, DataType.STRING);
 					} // End if
 
-					if(!hasIntercept){
+					if(!isFormula){
 						PMMLUtil.addValues(dataField, Collections.singletonList(value));
 					}
 
@@ -126,9 +142,15 @@ public class RegressionResults extends PythonObject {
 				} else
 
 				{
-					DataField dataField = encoder.createDataField(xname, OpType.CONTINUOUS, DataType.DOUBLE);
+					if(("const").equals(xname) && (expectIntercept)){
+						features.add(new InterceptFeature(encoder, xname, DataType.STRING));
+					} else
 
-					features.add(new ContinuousFeature(encoder, dataField));
+					{
+						DataField dataField = encoder.createDataField(xname, OpType.CONTINUOUS, DataType.DOUBLE);
+
+						features.add(new ContinuousFeature(encoder, dataField));
+					}
 				}
 			}
 		}
@@ -137,15 +159,21 @@ public class RegressionResults extends PythonObject {
 	}
 
 	public Model encodeModel(Schema schema){
+		Integer kConstant = getKConstant();
 		List<Number> params = getParams();
-		Number intercept = 0d;
 
 		PMMLEncoder encoder = schema.getEncoder();
 
 		Label label = schema.getLabel();
 		List<? extends Feature> features = schema.getFeatures();
 
-		if(features.size() > 0){
+		Number intercept = 0d;
+
+		if(kConstant == 0){
+			// Ignored
+		} else
+
+		if(kConstant == 1){
 			Feature feature = features.get(0);
 
 			if(feature instanceof InterceptFeature){
@@ -158,7 +186,15 @@ public class RegressionResults extends PythonObject {
 				features.remove(0);
 
 				schema = new Schema(encoder, label, features);
+			} else
+
+			{
+				throw new IllegalArgumentException();
 			}
+		} else
+
+		{
+			throw new IllegalArgumentException();
 		}
 
 		return createRegressionModel(features, params, intercept, schema);
@@ -174,6 +210,10 @@ public class RegressionResults extends PythonObject {
 
 	public List<Number> getParams(){
 		return getNumberArray("params");
+	}
+
+	public Integer getKConstant(){
+		return getInteger("k_constant");
 	}
 
 	private static final Pattern TERM_INTERCEPT = Pattern.compile("Intercept");

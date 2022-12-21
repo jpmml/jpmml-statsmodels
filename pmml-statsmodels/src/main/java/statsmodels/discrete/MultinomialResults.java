@@ -37,6 +37,7 @@ import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.TypeUtil;
 import org.jpmml.converter.regression.RegressionModelUtil;
+import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
 public class MultinomialResults extends DiscreteResults {
@@ -76,7 +77,7 @@ public class MultinomialResults extends DiscreteResults {
 	public Model encodeModel(Schema schema){
 		Integer j = getJ();
 		Integer k = getK();
-
+		Integer kConstant = getKConstant();
 		List<Number> params = getParams();
 
 		Label label = schema.getLabel();
@@ -94,11 +95,51 @@ public class MultinomialResults extends DiscreteResults {
 			regressionTables.add(regressionTable);
 		}
 
-		// Rows one up from the base case
-		for(int i = 0; i < (categoricalLabel.size() - 1); i++){
-			List<Number> coefficients = FortranMatrixUtil.getRow(params, (categoricalLabel.size() - 1), k, i);
+		int rows = (categoricalLabel.size() - 1);
+		int columns = k;
 
-			RegressionTable regressionTable = RegressionModelUtil.createRegressionTable(features, coefficients, null)
+		if(kConstant == 0){
+			// Ignored
+		} else
+
+		if(kConstant == 1){
+			Feature feature = features.get(0);
+
+			if(feature instanceof InterceptFeature){
+				InterceptFeature interceptFeature = (InterceptFeature)feature;
+
+				features = new ArrayList<>(features);
+				features.remove(0);
+			} else
+
+			{
+				throw new IllegalArgumentException();
+			}
+		} else
+
+		{
+			throw new IllegalArgumentException();
+		}
+
+		// Rows one up from the base case
+		for(int i = 0; i < rows; i++){
+			List<Number> coefficients = FortranMatrixUtil.getRow(params, rows, columns, i);
+			Number intercept = null;
+
+			if(kConstant == 0){
+				// Ignored
+			} else
+
+			if(kConstant == 1){
+				coefficients = new ArrayList<>(coefficients);
+				intercept = coefficients.remove(0);
+			} else
+
+			{
+				throw new IllegalArgumentException();
+			}
+
+			RegressionTable regressionTable = RegressionModelUtil.createRegressionTable(features, coefficients, intercept)
 				.setTargetCategory(categoricalLabel.getValue(i + 1));
 
 			regressionTables.add(regressionTable);

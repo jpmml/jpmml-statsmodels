@@ -1,6 +1,7 @@
 from pandas import DataFrame
 from statsmodels.api import MNLogit, OLS, WLS
 from statsmodels.formula.api import logit, ols, poisson, wls
+from statsmodels.tools import add_constant
 
 import pandas
 
@@ -42,7 +43,7 @@ print(iris_df.dtypes)
 iris_X, iris_y = split_csv(iris_df)
 
 def build_iris(model, name):
-	results = model.fit()
+	results = model.fit(method = "bfgs")
 	print(results.summary())
 
 	store_pkl(results, name)
@@ -52,6 +53,10 @@ def build_iris(model, name):
 	store_csv(species_proba, name)
 
 build_iris(MNLogit(iris_y, iris_X), "MNLogitIris")
+
+iris_X = add_constant(iris_X)
+
+build_iris(MNLogit(iris_y, iris_X), "MNLogitConstIris")
 
 auto_df = load_csv("Auto")
 print(auto_df.dtypes)
@@ -74,6 +79,11 @@ build_auto(WLS(auto_y, auto_X), "WLSAuto")
 
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaAuto")
 build_auto(wls(formula = auto_formula, data = auto_df), "WLSFormulaAuto")
+
+auto_X = add_constant(auto_X)
+
+build_auto(OLS(auto_y, auto_X), "OLSConstAuto")
+build_auto(WLS(auto_y, auto_X), "WLSConstAuto")
 
 visit_df = load_csv("Visit")
 print(visit_df.dtypes)
