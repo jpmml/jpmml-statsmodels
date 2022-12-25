@@ -43,6 +43,13 @@ public class RegressionResults extends PythonObject {
 		return encoder.encodePMML(model);
 	}
 
+	public Model encodeModel(Schema schema){
+		RegressionModel regressionModel = getModel();
+		List<Number> params = getParams();
+
+		return regressionModel.encodeModel(params, schema);
+	}
+
 	public RegressionModel getModel(){
 		return get("model", RegressionModel.class);
 	}

@@ -18,7 +18,9 @@
  */
 package statsmodels.regression;
 
+import org.dmg.pmml.Model;
 import org.dmg.pmml.PMML;
+import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
@@ -32,6 +34,12 @@ public class RegressionResultsWrapper extends PythonObject {
 		RegressionResults regressionResults = getResults();
 
 		return regressionResults.encodePMML(encoder);
+	}
+
+	public Model encodeModel(Schema schema){
+		RegressionResults regressionResults = getResults();
+
+		return regressionResults.encodeModel(schema);
 	}
 
 	public RegressionResults getResults(){
