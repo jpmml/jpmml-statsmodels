@@ -26,7 +26,7 @@ import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
-public class RegressionResults extends PythonObject implements HasKConstant {
+public class RegressionResults extends PythonObject {
 
 	public RegressionResults(String module, String name){
 		super(module, name);
@@ -41,11 +41,6 @@ public class RegressionResults extends PythonObject implements HasKConstant {
 		Model model = regressionModel.encodeModel(params, schema);
 
 		return encoder.encodePMML(model);
-	}
-
-	@Override
-	public Integer getKConstant(){
-		return getInteger("k_constant");
 	}
 
 	public RegressionModel getModel(){
