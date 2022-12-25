@@ -40,7 +40,7 @@ import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import statsmodels.data.ModelData;
 
-public class RegressionModel extends PythonObject {
+public class RegressionModel extends PythonObject implements HasKConstant {
 
 	public RegressionModel(String module, String name){
 		super(module, name);
@@ -148,6 +148,7 @@ public class RegressionModel extends PythonObject {
 		return get("data", ModelData.class);
 	}
 
+	@Override
 	public Integer getKConstant(){
 		return getInteger("k_constant");
 	}

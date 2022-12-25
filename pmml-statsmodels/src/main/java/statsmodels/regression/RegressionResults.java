@@ -32,7 +32,7 @@ import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
-public class RegressionResults extends PythonObject {
+public class RegressionResults extends PythonObject implements HasKConstant {
 
 	public RegressionResults(String module, String name){
 		super(module, name);
@@ -94,15 +94,16 @@ public class RegressionResults extends PythonObject {
 		return RegressionModelUtil.createRegression(features, coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.NONE, schema);
 	}
 
+	@Override
+	public Integer getKConstant(){
+		return getInteger("k_constant");
+	}
+
 	public RegressionModel getModel(){
 		return get("model", RegressionModel.class);
 	}
 
 	public List<Number> getParams(){
 		return getNumberArray("params");
-	}
-
-	public Integer getKConstant(){
-		return getInteger("k_constant");
 	}
 }
