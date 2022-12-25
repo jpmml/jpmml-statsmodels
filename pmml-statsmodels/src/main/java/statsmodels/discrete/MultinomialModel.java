@@ -18,12 +18,48 @@
  */
 package statsmodels.discrete;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Iterables;
+import org.dmg.pmml.DataField;
+import org.dmg.pmml.DataType;
+import org.dmg.pmml.OpType;
+import org.jpmml.converter.CategoricalLabel;
+import org.jpmml.converter.Label;
+import org.jpmml.converter.TypeUtil;
+import org.jpmml.statsmodels.StatsModelsEncoder;
 
 public class MultinomialModel extends DiscreteModel {
 
 	public MultinomialModel(String module, String name){
 		super(module, name);
+	}
+
+	@Override
+	public Label encodeLabel(List<String> ynames, StatsModelsEncoder encoder){
+		Map<Integer, ?> ynamesMap = getYNamesMap();
+
+		String yname = Iterables.getOnlyElement(ynames);
+
+		List<Object> categories = new ArrayList<>();
+
+		for(int i = 0; i < ynamesMap.size(); i++){
+			Object category = ynamesMap.get(i);
+
+			if(category == null){
+				throw new IllegalArgumentException();
+			}
+
+			categories.add(category);
+		}
+
+		DataType dataType = TypeUtil.getDataType(categories, DataType.STRING);
+
+		DataField dataField = encoder.createDataField(yname, OpType.CATEGORICAL, dataType, categories);
+
+		return new CategoricalLabel(dataField);
 	}
 
 	public Map<Integer, ?> getYNamesMap(){

@@ -18,33 +18,16 @@
  */
 package statsmodels.discrete;
 
-import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
-import org.dmg.pmml.DataField;
-import org.dmg.pmml.DataType;
-import org.dmg.pmml.OpType;
-import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.Feature;
-import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
-import org.jpmml.statsmodels.StatsModelsEncoder;
 
 public class LogitResults extends DiscreteResults {
 
 	public LogitResults(String module, String name){
 		super(module, name);
-	}
-
-	@Override
-	public Label encodeLabel(List<String> ynames, StatsModelsEncoder encoder){
-		String yname = Iterables.getOnlyElement(ynames);
-
-		DataField dataField = encoder.createDataField(yname, OpType.CATEGORICAL, DataType.INTEGER, Arrays.asList(0, 1));
-
-		return new CategoricalLabel(dataField);
 	}
 
 	@Override

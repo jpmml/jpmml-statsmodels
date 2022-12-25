@@ -19,30 +19,18 @@
 package statsmodels.regression;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.google.common.collect.Iterables;
-import org.dmg.pmml.DataField;
-import org.dmg.pmml.DataType;
 import org.dmg.pmml.Model;
-import org.dmg.pmml.OpType;
 import org.dmg.pmml.PMML;
-import org.jpmml.converter.BinaryFeature;
-import org.jpmml.converter.ContinuousFeature;
-import org.jpmml.converter.ContinuousLabel;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.PMMLEncoder;
-import org.jpmml.converter.PMMLUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
-import statsmodels.data.ModelData;
 
 public class RegressionResults extends PythonObject {
 
@@ -51,111 +39,13 @@ public class RegressionResults extends PythonObject {
 	}
 
 	public PMML encodePMML(StatsModelsEncoder encoder){
-		Schema schema = encodeSchema(encoder);
+		RegressionModel regressionModel = getModel();
+
+		Schema schema = regressionModel.encodeSchema(encoder);
 
 		Model model = encodeModel(schema);
 
 		return encoder.encodePMML(model);
-	}
-
-	public Schema encodeSchema(StatsModelsEncoder encoder){
-		RegressionModel regressionModel = getModel();
-
-		ModelData modelData = regressionModel.getData();
-
-		ModelData.Cache cache = modelData.getCache();
-
-		List<String> xnames = cache.getXNames();
-		List<String> ynames = cache.getYNames();
-
-		Label label = encodeLabel(ynames, encoder);
-
-		List<Feature> features = encodeFeatures(xnames, encoder);
-
-		return new Schema(encoder, label, features);
-	}
-
-	public Label encodeLabel(List<String> ynames, StatsModelsEncoder encoder){
-		String yname = Iterables.getOnlyElement(ynames);
-
-		DataField dataField = encoder.createDataField(yname, OpType.CONTINUOUS, DataType.DOUBLE);
-
-		return new ContinuousLabel(dataField);
-	}
-
-	public List<Feature> encodeFeatures(List<String> xnames, StatsModelsEncoder encoder){
-		Integer kConstant = getKConstant();
-
-		List<Feature> features = new ArrayList<>();
-
-		Matcher interceptMatcher = RegressionResults.TERM_INTERCEPT.matcher("");
-		Matcher binaryIndicatorMatcher = RegressionResults.TERM_BINARY_INDICATOR.matcher("");
-
-		boolean expectIntercept;
-
-		if(kConstant == 0){
-			expectIntercept = false;
-		} else
-
-		if(kConstant == 1){
-			expectIntercept = true;
-		} else
-
-		{
-			throw new IllegalArgumentException();
-		}
-
-		boolean isFormula = false;
-
-		for(int i = 0; i < xnames.size(); i++){
-			String xname = xnames.get(i);
-
-			if((i == 0) && (expectIntercept)){
-				interceptMatcher = interceptMatcher.reset(xname);
-
-				if(interceptMatcher.matches()){
-					isFormula = true;
-
-					features.add(new InterceptFeature(encoder, xname, DataType.DOUBLE));
-
-					continue;
-				}
-			} // End if
-
-			if(i >= 0){
-				binaryIndicatorMatcher = binaryIndicatorMatcher.reset(xname);
-
-				if(binaryIndicatorMatcher.matches()){
-					String name = binaryIndicatorMatcher.group(1);
-					String value = binaryIndicatorMatcher.group(2);
-
-					DataField dataField = encoder.getDataField(name);
-					if(dataField == null){
-						dataField = encoder.createDataField(name, OpType.CATEGORICAL, DataType.STRING);
-					} // End if
-
-					if(!isFormula){
-						PMMLUtil.addValues(dataField, Collections.singletonList(value));
-					}
-
-					features.add(new BinaryFeature(encoder, dataField, value));
-				} else
-
-				{
-					if(("const").equals(xname) && (expectIntercept)){
-						features.add(new InterceptFeature(encoder, xname, DataType.STRING));
-					} else
-
-					{
-						DataField dataField = encoder.createDataField(xname, OpType.CONTINUOUS, DataType.DOUBLE);
-
-						features.add(new ContinuousFeature(encoder, dataField));
-					}
-				}
-			}
-		}
-
-		return features;
 	}
 
 	public Model encodeModel(Schema schema){
@@ -215,7 +105,4 @@ public class RegressionResults extends PythonObject {
 	public Integer getKConstant(){
 		return getInteger("k_constant");
 	}
-
-	private static final Pattern TERM_INTERCEPT = Pattern.compile("Intercept");
-	private static final Pattern TERM_BINARY_INDICATOR = Pattern.compile("C\\((.+)\\)\\[T\\.(.+)\\]");
 }

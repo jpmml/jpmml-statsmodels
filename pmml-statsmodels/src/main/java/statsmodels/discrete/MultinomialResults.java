@@ -20,14 +20,10 @@ package statsmodels.discrete;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.google.common.collect.Iterables;
-import org.dmg.pmml.DataField;
 import org.dmg.pmml.DataType;
 import org.dmg.pmml.MiningFunction;
 import org.dmg.pmml.Model;
-import org.dmg.pmml.OpType;
 import org.dmg.pmml.regression.RegressionTable;
 import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.Feature;
@@ -35,42 +31,13 @@ import org.jpmml.converter.FortranMatrixUtil;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
-import org.jpmml.converter.TypeUtil;
 import org.jpmml.converter.regression.RegressionModelUtil;
 import org.jpmml.statsmodels.InterceptFeature;
-import org.jpmml.statsmodels.StatsModelsEncoder;
 
 public class MultinomialResults extends DiscreteResults {
 
 	public MultinomialResults(String module, String name){
 		super(module, name);
-	}
-
-	@Override
-	public Label encodeLabel(List<String> ynames, StatsModelsEncoder encoder){
-		MultinomialModel model = getModel();
-
-		String yname = Iterables.getOnlyElement(ynames);
-
-		Map<Integer, ?> ynamesMap = model.getYNamesMap();
-
-		List<Object> categories = new ArrayList<>();
-
-		for(int i = 0; i < ynamesMap.size(); i++){
-			Object category = ynamesMap.get(i);
-
-			if(category == null){
-				throw new IllegalArgumentException();
-			}
-
-			categories.add(category);
-		}
-
-		DataType dataType = TypeUtil.getDataType(categories, DataType.STRING);
-
-		DataField dataField = encoder.createDataField(yname, OpType.CATEGORICAL, dataType, categories);
-
-		return new CategoricalLabel(dataField);
 	}
 
 	@Override
