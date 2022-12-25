@@ -38,15 +38,15 @@ public class MultinomialModel extends DiscreteModel {
 	}
 
 	@Override
-	public Label encodeLabel(List<String> ynames, StatsModelsEncoder encoder){
-		Map<Integer, ?> ynamesMap = getYNamesMap();
+	public Label encodeLabel(List<String> yNames, StatsModelsEncoder encoder){
+		Map<Integer, ?> yNamesMap = getYNamesMap();
 
-		String yname = Iterables.getOnlyElement(ynames);
+		String yName = Iterables.getOnlyElement(yNames);
 
 		List<Object> categories = new ArrayList<>();
 
-		for(int i = 0; i < ynamesMap.size(); i++){
-			Object category = ynamesMap.get(i);
+		for(int i = 0; i < yNamesMap.size(); i++){
+			Object category = yNamesMap.get(i);
 
 			if(category == null){
 				throw new IllegalArgumentException();
@@ -57,7 +57,7 @@ public class MultinomialModel extends DiscreteModel {
 
 		DataType dataType = TypeUtil.getDataType(categories, DataType.STRING);
 
-		DataField dataField = encoder.createDataField(yname, OpType.CATEGORICAL, dataType, categories);
+		DataField dataField = encoder.createDataField(yName, OpType.CATEGORICAL, dataType, categories);
 
 		return new CategoricalLabel(dataField);
 	}

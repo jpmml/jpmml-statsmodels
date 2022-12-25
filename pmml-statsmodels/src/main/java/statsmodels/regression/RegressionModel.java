@@ -51,25 +51,25 @@ public class RegressionModel extends PythonObject {
 
 		ModelData.Cache cache = data.getCache();
 
-		List<String> xnames = cache.getXNames();
-		List<String> ynames = cache.getYNames();
+		List<String> xNames = cache.getXNames();
+		List<String> yNames = cache.getYNames();
 
-		Label label = encodeLabel(ynames, encoder);
+		Label label = encodeLabel(yNames, encoder);
 
-		List<Feature> features = encodeFeatures(xnames, encoder);
+		List<Feature> features = encodeFeatures(xNames, encoder);
 
 		return new Schema(encoder, label, features);
 	}
 
-	public Label encodeLabel(List<String> ynames, StatsModelsEncoder encoder){
-		String yname = Iterables.getOnlyElement(ynames);
+	public Label encodeLabel(List<String> yNames, StatsModelsEncoder encoder){
+		String yName = Iterables.getOnlyElement(yNames);
 
-		DataField dataField = encoder.createDataField(yname, OpType.CONTINUOUS, DataType.DOUBLE);
+		DataField dataField = encoder.createDataField(yName, OpType.CONTINUOUS, DataType.DOUBLE);
 
 		return new ContinuousLabel(dataField);
 	}
 
-	public List<Feature> encodeFeatures(List<String> xnames, StatsModelsEncoder encoder){
+	public List<Feature> encodeFeatures(List<String> xNames, StatsModelsEncoder encoder){
 		Integer kConstant = getKConstant();
 
 		List<Feature> features = new ArrayList<>();
@@ -93,23 +93,23 @@ public class RegressionModel extends PythonObject {
 
 		boolean isFormula = false;
 
-		for(int i = 0; i < xnames.size(); i++){
-			String xname = xnames.get(i);
+		for(int i = 0; i < xNames.size(); i++){
+			String xName = xNames.get(i);
 
 			if((i == 0) && (expectIntercept)){
-				interceptMatcher = interceptMatcher.reset(xname);
+				interceptMatcher = interceptMatcher.reset(xName);
 
 				if(interceptMatcher.matches()){
 					isFormula = true;
 
-					features.add(new InterceptFeature(encoder, xname, DataType.DOUBLE));
+					features.add(new InterceptFeature(encoder, xName, DataType.DOUBLE));
 
 					continue;
 				}
 			} // End if
 
 			if(i >= 0){
-				binaryIndicatorMatcher = binaryIndicatorMatcher.reset(xname);
+				binaryIndicatorMatcher = binaryIndicatorMatcher.reset(xName);
 
 				if(binaryIndicatorMatcher.matches()){
 					String name = binaryIndicatorMatcher.group(1);
@@ -128,12 +128,12 @@ public class RegressionModel extends PythonObject {
 				} else
 
 				{
-					if(("const").equals(xname) && (expectIntercept)){
-						features.add(new InterceptFeature(encoder, xname, DataType.STRING));
+					if(("const").equals(xName) && (expectIntercept)){
+						features.add(new InterceptFeature(encoder, xName, DataType.STRING));
 					} else
 
 					{
-						DataField dataField = encoder.createDataField(xname, OpType.CONTINUOUS, DataType.DOUBLE);
+						DataField dataField = encoder.createDataField(xName, OpType.CONTINUOUS, DataType.DOUBLE);
 
 						features.add(new ContinuousFeature(encoder, dataField));
 					}

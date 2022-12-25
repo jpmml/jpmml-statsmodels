@@ -50,10 +50,10 @@ public class ModelData extends PythonObject {
 		}
 
 		public List<String> getYNames(){
-			Object ynames = get("ynames");
+			Object yNames = get("ynames");
 
-			if(ynames instanceof String){
-				return Collections.singletonList((String)ynames);
+			if(yNames instanceof String){
+				return Collections.singletonList((String)yNames);
 			}
 
 			return getList("ynames", String.class);
