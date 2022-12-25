@@ -33,8 +33,10 @@ import org.jpmml.converter.ContinuousFeature;
 import org.jpmml.converter.ContinuousLabel;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
+import org.jpmml.converter.PMMLEncoder;
 import org.jpmml.converter.PMMLUtil;
 import org.jpmml.converter.Schema;
+import org.jpmml.converter.regression.RegressionModelUtil;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
@@ -144,6 +146,43 @@ public class RegressionModel extends PythonObject implements HasKConstant {
 		return features;
 	}
 
+	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> params, Schema schema){
+		Integer kConstant = getKConstant();
+
+		PMMLEncoder encoder = schema.getEncoder();
+
+		Label label = schema.getLabel();
+		List<? extends Feature> features = schema.getFeatures();
+
+		List<Number> coefficients = new ArrayList<>(params);
+		Number intercept = null;
+
+		// XXX
+		int kIndex = 0;
+
+		if(kConstant == 0){
+			// Ignored
+		} else
+
+		if(kConstant == 1){
+			intercept = coefficients.remove(kIndex);
+
+			features = dropInterceptFeature(features, kIndex);
+
+			schema = new Schema(encoder, label, features);
+		} else
+
+		{
+			throw new IllegalArgumentException();
+		}
+
+		return encodeModel(coefficients, intercept, schema);
+	}
+
+	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
+		return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.NONE, schema);
+	}
+
 	public ModelData getData(){
 		return get("data", ModelData.class);
 	}
@@ -151,6 +190,24 @@ public class RegressionModel extends PythonObject implements HasKConstant {
 	@Override
 	public Integer getKConstant(){
 		return getInteger("k_constant");
+	}
+
+	static
+	protected List<? extends Feature> dropInterceptFeature(List<? extends Feature> features, int index){
+		Feature feature = features.get(index);
+
+		if(feature instanceof InterceptFeature){
+			InterceptFeature interceptFeature = (InterceptFeature)feature;
+
+			features = new ArrayList<>(features);
+			features.remove(interceptFeature);
+
+			return features;
+		} else
+
+		{
+			throw new IllegalArgumentException();
+		}
 	}
 
 	private static final Pattern TERM_INTERCEPT = Pattern.compile("Intercept");

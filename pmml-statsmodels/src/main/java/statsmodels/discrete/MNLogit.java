@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.dmg.pmml.DataType;
 import org.dmg.pmml.MiningFunction;
-import org.dmg.pmml.Model;
 import org.dmg.pmml.regression.RegressionTable;
 import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.Feature;
@@ -32,20 +31,18 @@ import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
-import org.jpmml.statsmodels.InterceptFeature;
 
-public class MultinomialResults extends DiscreteResults {
+public class MNLogit extends MultinomialModel {
 
-	public MultinomialResults(String module, String name){
+	public MNLogit(String module, String name){
 		super(module, name);
 	}
 
 	@Override
-	public Model encodeModel(Schema schema){
+	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> params, Schema schema){
 		Integer j = getJ();
 		Integer k = getK();
 		Integer kConstant = getKConstant();
-		List<Number> params = getParams();
 
 		Label label = schema.getLabel();
 		List<? extends Feature> features = schema.getFeatures();
@@ -65,23 +62,15 @@ public class MultinomialResults extends DiscreteResults {
 		int rows = (categoricalLabel.size() - 1);
 		int columns = k;
 
+		// XXX
+		int kIndex = 0;
+
 		if(kConstant == 0){
 			// Ignored
 		} else
 
 		if(kConstant == 1){
-			Feature feature = features.get(0);
-
-			if(feature instanceof InterceptFeature){
-				InterceptFeature interceptFeature = (InterceptFeature)feature;
-
-				features = new ArrayList<>(features);
-				features.remove(0);
-			} else
-
-			{
-				throw new IllegalArgumentException();
-			}
+			features = dropInterceptFeature(features, kIndex);
 		} else
 
 		{
@@ -90,7 +79,7 @@ public class MultinomialResults extends DiscreteResults {
 
 		// Rows one up from the base case
 		for(int i = 0; i < rows; i++){
-			List<Number> coefficients = FortranMatrixUtil.getRow(params, rows, columns, i);
+			List<? extends Number> coefficients = new ArrayList<>(FortranMatrixUtil.getRow(params, rows, columns, i));
 			Number intercept = null;
 
 			if(kConstant == 0){
@@ -98,8 +87,7 @@ public class MultinomialResults extends DiscreteResults {
 			} else
 
 			if(kConstant == 1){
-				coefficients = new ArrayList<>(coefficients);
-				intercept = coefficients.remove(0);
+				intercept = coefficients.remove(kIndex);
 			} else
 
 			{
@@ -117,18 +105,5 @@ public class MultinomialResults extends DiscreteResults {
 			.setOutput(ModelUtil.createProbabilityOutput(DataType.DOUBLE, categoricalLabel));
 
 		return regressionModel;
-	}
-
-	@Override
-	public MultinomialModel getModel(){
-		return get("model", MultinomialModel.class);
-	}
-
-	public Integer getJ(){
-		return getInteger("J");
-	}
-
-	public Integer getK(){
-		return getInteger("K");
 	}
 }

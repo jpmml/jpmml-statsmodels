@@ -62,6 +62,14 @@ public class MultinomialModel extends DiscreteModel {
 		return new CategoricalLabel(dataField);
 	}
 
+	public Integer getJ(){
+		return getInteger("J");
+	}
+
+	public Integer getK(){
+		return getInteger("K");
+	}
+
 	public Map<Integer, ?> getYNamesMap(){
 		return (Map)getDict("_ynames_map");
 	}

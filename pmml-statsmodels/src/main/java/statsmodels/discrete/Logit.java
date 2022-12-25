@@ -20,18 +20,17 @@ package statsmodels.discrete;
 
 import java.util.List;
 
-import org.jpmml.converter.Feature;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
 
-public class LogitResults extends DiscreteResults {
+public class Logit extends BinaryModel {
 
-	public LogitResults(String module, String name){
+	public Logit(String module, String name){
 		super(module, name);
 	}
 
 	@Override
-	public org.dmg.pmml.regression.RegressionModel createRegressionModel(List<? extends Feature> features, List<? extends Number> coefficients, Number intercept, Schema schema){
-		return RegressionModelUtil.createBinaryLogisticClassification(features, coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.LOGIT, true, schema);
+	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
+		return RegressionModelUtil.createBinaryLogisticClassification(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.LOGIT, true, schema);
 	}
 }

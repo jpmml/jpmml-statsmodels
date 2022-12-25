@@ -18,11 +18,19 @@
  */
 package statsmodels.discrete;
 
+import java.util.List;
+
+import org.jpmml.converter.Schema;
 import statsmodels.regression.RegressionModel;
 
 public class DiscreteModel extends RegressionModel {
 
 	public DiscreteModel(String module, String name){
 		super(module, name);
+	}
+
+	@Override
+	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
+		throw new UnsupportedOperationException();
 	}
 }

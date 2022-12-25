@@ -21,18 +21,17 @@ package statsmodels.discrete;
 import java.util.List;
 
 import org.dmg.pmml.regression.RegressionModel;
-import org.jpmml.converter.Feature;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
 
-public class PoissonResults extends CountResults {
+public class Poisson extends CountModel {
 
-	public PoissonResults(String module, String name){
+	public Poisson(String module, String name){
 		super(module, name);
 	}
 
 	@Override
-	public org.dmg.pmml.regression.RegressionModel createRegressionModel(List<? extends Feature> features, List<? extends Number> coefficients, Number intercept, Schema schema){
-		return RegressionModelUtil.createRegression(features, coefficients, intercept, RegressionModel.NormalizationMethod.EXP, schema);
+	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
+		return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, RegressionModel.NormalizationMethod.EXP, schema);
 	}
 }

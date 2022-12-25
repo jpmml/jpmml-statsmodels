@@ -18,18 +18,12 @@
  */
 package statsmodels.regression;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.dmg.pmml.Model;
 import org.dmg.pmml.PMML;
-import org.jpmml.converter.Feature;
-import org.jpmml.converter.Label;
-import org.jpmml.converter.PMMLEncoder;
 import org.jpmml.converter.Schema;
-import org.jpmml.converter.regression.RegressionModelUtil;
 import org.jpmml.python.PythonObject;
-import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
 public class RegressionResults extends PythonObject implements HasKConstant {
@@ -40,58 +34,13 @@ public class RegressionResults extends PythonObject implements HasKConstant {
 
 	public PMML encodePMML(StatsModelsEncoder encoder){
 		RegressionModel regressionModel = getModel();
+		List<Number> params = getParams();
 
 		Schema schema = regressionModel.encodeSchema(encoder);
 
-		Model model = encodeModel(schema);
+		Model model = regressionModel.encodeModel(params, schema);
 
 		return encoder.encodePMML(model);
-	}
-
-	public Model encodeModel(Schema schema){
-		Integer kConstant = getKConstant();
-		List<Number> params = getParams();
-
-		PMMLEncoder encoder = schema.getEncoder();
-
-		Label label = schema.getLabel();
-		List<? extends Feature> features = schema.getFeatures();
-
-		Number intercept = 0d;
-
-		if(kConstant == 0){
-			// Ignored
-		} else
-
-		if(kConstant == 1){
-			Feature feature = features.get(0);
-
-			if(feature instanceof InterceptFeature){
-				InterceptFeature interceptFeature = (InterceptFeature)feature;
-
-				params = new ArrayList<>(params);
-				intercept = params.remove(0);
-
-				features = new ArrayList<>(features);
-				features.remove(0);
-
-				schema = new Schema(encoder, label, features);
-			} else
-
-			{
-				throw new IllegalArgumentException();
-			}
-		} else
-
-		{
-			throw new IllegalArgumentException();
-		}
-
-		return createRegressionModel(features, params, intercept, schema);
-	}
-
-	public org.dmg.pmml.regression.RegressionModel createRegressionModel(List<? extends Feature> features, List<? extends Number> coefficients, Number intercept, Schema schema){
-		return RegressionModelUtil.createRegression(features, coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.NONE, schema);
 	}
 
 	@Override
