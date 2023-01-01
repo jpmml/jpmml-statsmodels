@@ -23,6 +23,7 @@ import org.dmg.pmml.PMML;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import statsmodels.Results;
 
 public class RegressionResultsWrapper extends PythonObject {
 
@@ -31,18 +32,18 @@ public class RegressionResultsWrapper extends PythonObject {
 	}
 
 	public PMML encodePMML(StatsModelsEncoder encoder){
-		RegressionResults regressionResults = getResults();
+		Results results = getResults();
 
-		return regressionResults.encodePMML(encoder);
+		return results.encodePMML(encoder);
 	}
 
 	public Model encodeModel(Schema schema){
-		RegressionResults regressionResults = getResults();
+		Results results = getResults();
 
-		return regressionResults.encodeModel(schema);
+		return results.encodeModel(schema);
 	}
 
-	public RegressionResults getResults(){
-		return get("_results", RegressionResults.class);
+	public Results getResults(){
+		return get("_results", Results.class);
 	}
 }

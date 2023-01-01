@@ -16,42 +16,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package statsmodels.regression;
+package statsmodels;
 
 import java.util.List;
 
-import org.dmg.pmml.Model;
 import org.dmg.pmml.PMML;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
-public class RegressionResults extends PythonObject {
+public class Results extends PythonObject {
 
-	public RegressionResults(String module, String name){
+	public Results(String module, String name){
 		super(module, name);
 	}
 
 	public PMML encodePMML(StatsModelsEncoder encoder){
-		RegressionModel regressionModel = getModel();
+		Model model = getModel();
 		List<Number> params = getParams();
 
-		Schema schema = regressionModel.encodeSchema(encoder);
+		Schema schema = model.encodeSchema(encoder);
 
-		Model pmmlModel = regressionModel.encodeModel(params, schema);
+		org.dmg.pmml.Model pmmlModel = model.encodeModel(params, schema);
 
 		return encoder.encodePMML(pmmlModel);
 	}
 
-	public Model encodeModel(Schema schema){
-		RegressionModel regressionModel = getModel();
+	public org.dmg.pmml.Model encodeModel(Schema schema){
+		Model model = getModel();
 		List<Number> params = getParams();
 
-		return regressionModel.encodeModel(params, schema);
+		return model.encodeModel(params, schema);
 	}
 
-	public RegressionModel getModel(){
-		return get("model", RegressionModel.class);
+	public Model getModel(){
+		return get("model", Model.class);
 	}
 
 	public List<Number> getParams(){
