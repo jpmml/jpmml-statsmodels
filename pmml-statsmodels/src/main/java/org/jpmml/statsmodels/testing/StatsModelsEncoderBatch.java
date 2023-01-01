@@ -25,7 +25,7 @@ import org.dmg.pmml.PMML;
 import org.jpmml.evaluator.ResultField;
 import org.jpmml.python.testing.PythonEncoderBatch;
 import org.jpmml.statsmodels.StatsModelsEncoder;
-import statsmodels.regression.RegressionResultsWrapper;
+import statsmodels.ResultsWrapper;
 
 abstract
 public class StatsModelsEncoderBatch extends PythonEncoderBatch {
@@ -42,7 +42,7 @@ public class StatsModelsEncoderBatch extends PythonEncoderBatch {
 	public PMML getPMML() throws Exception {
 		StatsModelsEncoder encoder = new StatsModelsEncoder();
 
-		RegressionResultsWrapper resultsWrapper = loadPickle(RegressionResultsWrapper.class);
+		ResultsWrapper resultsWrapper = loadPickle(ResultsWrapper.class);
 
 		PMML pmml = resultsWrapper.encodePMML(encoder);
 

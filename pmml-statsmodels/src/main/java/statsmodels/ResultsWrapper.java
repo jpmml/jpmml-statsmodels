@@ -16,18 +16,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package statsmodels.regression;
+package statsmodels;
 
 import org.dmg.pmml.Model;
 import org.dmg.pmml.PMML;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
-import statsmodels.Results;
 
-public class RegressionResultsWrapper extends PythonObject {
+public class ResultsWrapper extends PythonObject {
 
-	public RegressionResultsWrapper(String module, String name){
+	public ResultsWrapper(String module, String name){
 		super(module, name);
 	}
 

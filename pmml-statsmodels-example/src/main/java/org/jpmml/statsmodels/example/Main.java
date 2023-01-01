@@ -34,7 +34,7 @@ import org.jpmml.python.StorageUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import statsmodels.regression.RegressionResultsWrapper;
+import statsmodels.ResultsWrapper;
 
 public class Main {
 
@@ -114,11 +114,11 @@ public class Main {
 			throw e;
 		}
 
-		if(!(object instanceof RegressionResultsWrapper)){
-			throw new IllegalArgumentException("The object (" + ClassDictUtil.formatClass(object) + ") is not a RegressionResultsWrapper");
+		if(!(object instanceof ResultsWrapper)){
+			throw new IllegalArgumentException("The object (" + ClassDictUtil.formatClass(object) + ") is not a ResultsWrapper");
 		}
 
-		RegressionResultsWrapper resultsWrapper = (RegressionResultsWrapper)object;
+		ResultsWrapper resultsWrapper = (ResultsWrapper)object;
 
 		PMML pmml;
 
