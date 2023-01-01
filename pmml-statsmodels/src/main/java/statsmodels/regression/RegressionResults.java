@@ -38,9 +38,9 @@ public class RegressionResults extends PythonObject {
 
 		Schema schema = regressionModel.encodeSchema(encoder);
 
-		Model model = regressionModel.encodeModel(params, schema);
+		Model pmmlModel = regressionModel.encodeModel(params, schema);
 
-		return encoder.encodePMML(model);
+		return encoder.encodePMML(pmmlModel);
 	}
 
 	public Model encodeModel(Schema schema){
