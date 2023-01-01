@@ -32,7 +32,7 @@ import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
 
-public class MNLogit extends MultinomialModel {
+public class MNLogit extends MultinomialRegressionModel {
 
 	public MNLogit(String module, String name){
 		super(module, name);

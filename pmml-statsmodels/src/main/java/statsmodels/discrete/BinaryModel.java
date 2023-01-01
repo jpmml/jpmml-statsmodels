@@ -29,6 +29,7 @@ import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.Label;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
+abstract
 public class BinaryModel extends DiscreteModel {
 
 	public BinaryModel(String module, String name){

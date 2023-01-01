@@ -25,17 +25,20 @@ import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.PMMLEncoder;
 import org.jpmml.converter.Schema;
-import org.jpmml.converter.regression.RegressionModelUtil;
 import statsmodels.Model;
 
+abstract
 public class RegressionModel extends Model {
 
 	public RegressionModel(String module, String name){
 		super(module, name);
 	}
 
+	abstract
+	public org.dmg.pmml.Model encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema);
+
 	@Override
-	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> params, Schema schema){
+	public org.dmg.pmml.Model encodeModel(List<? extends Number> params, Schema schema){
 		Integer kConstant = getKConstant();
 
 		PMMLEncoder encoder = schema.getEncoder();
@@ -66,9 +69,5 @@ public class RegressionModel extends Model {
 		}
 
 		return encodeModel(coefficients, intercept, schema);
-	}
-
-	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
-		return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.NONE, schema);
 	}
 }

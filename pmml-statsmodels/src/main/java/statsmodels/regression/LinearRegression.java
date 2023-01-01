@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Villu Ruusmann
+ * Copyright (c) 2019 Villu Ruusmann
  *
  * This file is part of JPMML-StatsModels
  *
@@ -16,12 +16,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package statsmodels.discrete;
+package statsmodels.regression;
 
-abstract
-public class CountModel extends DiscreteModel {
+import java.util.List;
 
-	public CountModel(String module, String name){
+import org.jpmml.converter.Schema;
+import org.jpmml.converter.regression.RegressionModelUtil;
+
+public class LinearRegression extends RegressionModel {
+
+	public LinearRegression(String module, String name){
 		super(module, name);
+	}
+
+	@Override
+	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
+		return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.NONE, schema);
 	}
 }

@@ -30,10 +30,12 @@ import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.TypeUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import statsmodels.Model;
 
-public class MultinomialModel extends DiscreteModel {
+abstract
+public class MultinomialRegressionModel extends Model {
 
-	public MultinomialModel(String module, String name){
+	public MultinomialRegressionModel(String module, String name){
 		super(module, name);
 	}
 
