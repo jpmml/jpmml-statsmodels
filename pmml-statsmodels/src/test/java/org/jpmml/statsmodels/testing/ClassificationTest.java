@@ -25,6 +25,11 @@ import org.junit.Test;
 public class ClassificationTest extends StatsModelsEncoderBatchTest implements Datasets, Fields {
 
 	@Test
+	public void evaluateGLMFormulaAudit() throws Exception {
+		evaluate("GLMFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+	}
+
+	@Test
 	public void evaluateLogitFormulaAudit() throws Exception {
 		evaluate("LogitFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}

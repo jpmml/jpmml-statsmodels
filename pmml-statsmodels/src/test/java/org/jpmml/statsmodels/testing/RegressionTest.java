@@ -24,6 +24,21 @@ import org.junit.Test;
 public class RegressionTest extends StatsModelsEncoderBatchTest implements Datasets {
 
 	@Test
+	public void evaluateGLMAuto() throws Exception {
+		evaluate("GLM", AUTO);
+	}
+
+	@Test
+	public void evaluateGLMConstAuto() throws Exception {
+		evaluate("GLMConst", AUTO);
+	}
+
+	@Test
+	public void evaluateGLMFormulaAuto() throws Exception {
+		evaluate("GLMFormula", AUTO);
+	}
+
+	@Test
 	public void evaluateOLSAuto() throws Exception {
 		evaluate("OLS", AUTO);
 	}
@@ -51,6 +66,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	@Test
 	public void evaluateWLSFormulaAuto() throws Exception {
 		evaluate("WLSFormula", AUTO);
+	}
+
+	@Test
+	public void evaluateGLMFormulaVisit() throws Exception {
+		evaluate("GLMFormula", VISIT);
 	}
 
 	@Test

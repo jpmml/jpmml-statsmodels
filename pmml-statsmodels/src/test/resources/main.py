@@ -1,6 +1,7 @@
 from pandas import DataFrame
-from statsmodels.api import MNLogit, OLS, WLS
-from statsmodels.formula.api import logit, ols, poisson, wls
+from statsmodels.api import GLM, MNLogit, OLS, WLS
+from statsmodels.formula.api import glm, logit, ols, poisson, wls
+from statsmodels.genmod.families import Binomial, Gaussian, Poisson
 from statsmodels.tools import add_constant
 
 import pandas
@@ -35,6 +36,7 @@ def build_audit(model, name):
 	adjusted_proba["probability(0)"] = 1 - adjusted_proba["probability(1)"]
 	store_csv(adjusted_proba, name)
 
+build_audit(glm(formula = audit_formula, data = audit_df, family = Binomial()), "GLMFormulaAudit")
 build_audit(logit(formula = audit_formula, data = audit_df), "LogitFormulaAudit")
 
 iris_df = load_csv("Iris")
@@ -74,14 +76,17 @@ def build_auto(model, name):
 	mpg = DataFrame(results.predict(auto_X), columns = ["mpg"])
 	store_csv(mpg, name)
 
+build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMAuto")
 build_auto(OLS(auto_y, auto_X), "OLSAuto")
 build_auto(WLS(auto_y, auto_X), "WLSAuto")
 
+build_auto(glm(formula = auto_formula, data = auto_df, family = Gaussian()), "GLMFormulaAuto")
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaAuto")
 build_auto(wls(formula = auto_formula, data = auto_df), "WLSFormulaAuto")
 
 auto_X = add_constant(auto_X)
 
+build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMConstAuto")
 build_auto(OLS(auto_y, auto_X), "OLSConstAuto")
 build_auto(WLS(auto_y, auto_X), "WLSConstAuto")
 
@@ -101,4 +106,5 @@ def build_visit(model, name):
 	docvis = DataFrame(results.predict(visit_X), columns = ["docvis"])
 	store_csv(docvis, name)
 
+build_visit(glm(formula = visit_formula, data = visit_df, family = Poisson()), "GLMFormulaVisit")
 build_visit(poisson(formula = visit_formula, data = visit_df), "PoissonFormulaVisit")
