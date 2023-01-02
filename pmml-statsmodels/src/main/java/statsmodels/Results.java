@@ -39,6 +39,8 @@ public class Results extends PythonObject {
 
 		org.dmg.pmml.Model pmmlModel = model.encodeModel(params, schema);
 
+		ensureAlgorithmName(pmmlModel, model.getClassName());
+
 		return encoder.encodePMML(pmmlModel);
 	}
 
@@ -46,7 +48,11 @@ public class Results extends PythonObject {
 		Model model = getModel();
 		List<Number> params = getParams();
 
-		return model.encodeModel(params, schema);
+		org.dmg.pmml.Model pmmlModel = model.encodeModel(params, schema);
+
+		ensureAlgorithmName(pmmlModel, model.getClassName());
+
+		return pmmlModel;
 	}
 
 	public Model getModel(){
@@ -55,5 +61,16 @@ public class Results extends PythonObject {
 
 	public List<Number> getParams(){
 		return getNumberArray("params");
+	}
+
+	static
+	private void ensureAlgorithmName(org.dmg.pmml.Model pmmlModel, String pythonClassName){
+		String algorithmName = pmmlModel.getAlgorithmName();
+
+		if(algorithmName == null){
+			algorithmName = pythonClassName;
+
+			pmmlModel.setAlgorithmName(algorithmName);
+		}
 	}
 }
