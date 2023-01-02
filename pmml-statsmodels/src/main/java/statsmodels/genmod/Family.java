@@ -20,10 +20,13 @@ package statsmodels.genmod;
 
 import org.jpmml.python.PythonObject;
 
-abstract
 public class Family extends PythonObject {
 
 	public Family(String module, String name){
 		super(module, name);
+	}
+
+	public Link getLink(){
+		return get("_link", Link.class);
 	}
 }

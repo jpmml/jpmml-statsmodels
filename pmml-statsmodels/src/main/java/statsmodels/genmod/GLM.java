@@ -24,16 +24,17 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import org.dmg.pmml.DataField;
 import org.dmg.pmml.DataType;
+import org.dmg.pmml.MiningFunction;
 import org.dmg.pmml.OpType;
+import org.dmg.pmml.general_regression.GeneralRegressionModel;
 import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.ContinuousLabel;
+import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
+import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
-import org.jpmml.converter.regression.RegressionModelUtil;
+import org.jpmml.converter.general_regression.GeneralRegressionModelUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
-import statsmodels.genmod.families.Binomial;
-import statsmodels.genmod.families.Gaussian;
-import statsmodels.genmod.families.Poisson;
 import statsmodels.regression.RegressionModel;
 
 public class GLM extends RegressionModel {
@@ -48,45 +49,127 @@ public class GLM extends RegressionModel {
 
 		String yName = Iterables.getOnlyElement(yNames);
 
-		if(family instanceof Binomial){
-			DataField dataField = encoder.createDataField(yName, OpType.CATEGORICAL, DataType.INTEGER, Arrays.asList(0, 1));
+		String familyName = family.getPythonName();
+		switch(familyName){
+			case "Binomial":
+				{
+					DataField dataField = encoder.createDataField(yName, OpType.CATEGORICAL, DataType.INTEGER, Arrays.asList(0, 1));
 
-			return new CategoricalLabel(dataField);
-		} else
+					return new CategoricalLabel(dataField);
+				}
+			case "Gaussian":
+			case "Poisson":
+				{
+					DataField dataField = encoder.createDataField(yName, OpType.CONTINUOUS, DataType.DOUBLE);
 
-		if((family instanceof Gaussian) || (family instanceof Poisson)){
-			DataField dataField = encoder.createDataField(yName, OpType.CONTINUOUS, DataType.DOUBLE);
-
-			return new ContinuousLabel(dataField);
-		} else
-
-		{
-			throw new IllegalArgumentException();
+					return new ContinuousLabel(dataField);
+				}
+			default:
+				throw new IllegalArgumentException(familyName);
 		}
 	}
 
 	@Override
-	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
+	public org.dmg.pmml.general_regression.GeneralRegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
 		Family family = getFamily();
 
-		if(family instanceof Binomial){
-			return RegressionModelUtil.createBinaryLogisticClassification(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.LOGIT, true, schema);
-		} else
+		Link link = family.getLink();
 
-		if(family instanceof Gaussian){
-			return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.NONE, schema);
-		} else
+		Label label = schema.getLabel();
+		List<? extends Feature> features = schema.getFeatures();
 
-		if(family instanceof Poisson){
-			return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.EXP, schema);
-		} else
+		Object targetCategory;
 
-		{
-			throw new IllegalArgumentException();
+		String familyName = family.getPythonName();
+		switch(familyName){
+			case "Binomial":
+				{
+					CategoricalLabel categoricalLabel = (CategoricalLabel)label;
+
+					targetCategory = categoricalLabel.getValue(1);
+				}
+				break;
+			case "Gaussian":
+			case "Poisson":
+				{
+					ContinuousLabel continuousLabel = (ContinuousLabel)label;
+
+					targetCategory = null;
+				}
+				break;
+			default:
+				throw new IllegalArgumentException(familyName);
 		}
+
+		GeneralRegressionModel generalRegressionModel = new GeneralRegressionModel(GeneralRegressionModel.ModelType.GENERALIZED_LINEAR, (targetCategory != null ? MiningFunction.CLASSIFICATION : MiningFunction.REGRESSION), ModelUtil.createMiningSchema(label), null, null, null)
+				.setDistribution(parseDistribution(family))
+				.setLinkFunction(parseLinkFunction(link))
+				.setLinkParameter(parseLinkParameter(link));
+
+		GeneralRegressionModelUtil.encodeRegressionTable(generalRegressionModel, features, coefficients, intercept, targetCategory);
+
+		switch(familyName){
+			case "Binomial":
+				{
+					CategoricalLabel categoricalLabel = (CategoricalLabel)label;
+
+					generalRegressionModel.setOutput(ModelUtil.createProbabilityOutput(DataType.DOUBLE, categoricalLabel));
+				}
+				break;
+			default:
+				break;
+		}
+
+		return generalRegressionModel;
 	}
 
 	public Family getFamily(){
 		return get("family", Family.class);
+	}
+
+	static
+	private GeneralRegressionModel.Distribution parseDistribution(Family family){
+		String familyName = family.getPythonName();
+
+		switch(familyName){
+			case "Binomial":
+				return GeneralRegressionModel.Distribution.BINOMIAL;
+			case "Gaussian":
+				return GeneralRegressionModel.Distribution.NORMAL;
+			case "Poisson":
+				return GeneralRegressionModel.Distribution.POISSON;
+			default:
+				throw new IllegalArgumentException(familyName);
+		}
+	}
+
+	static
+	private GeneralRegressionModel.LinkFunction parseLinkFunction(Link link){
+		String linkName = link.getPythonName();
+
+		switch(linkName){
+			case "identity":
+				return GeneralRegressionModel.LinkFunction.IDENTITY;
+			case "Log":
+				return GeneralRegressionModel.LinkFunction.LOG;
+			case "Logit":
+				return GeneralRegressionModel.LinkFunction.LOGIT;
+			default:
+				throw new IllegalArgumentException(linkName);
+		}
+	}
+
+	static
+	private Number parseLinkParameter(Link link){
+		String linkName = link.getPythonName();
+
+		switch(linkName){
+			case "identity":
+			case "Log":
+			case "Logit":
+				return null;
+			default:
+				throw new IllegalArgumentException(linkName);
+		}
 	}
 }

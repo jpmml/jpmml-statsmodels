@@ -16,13 +16,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with JPMML-StatsModels.  If not, see <http://www.gnu.org/licenses/>.
  */
-package statsmodels.genmod.families;
+package statsmodels.genmod;
 
-import statsmodels.genmod.Family;
+import org.jpmml.python.PythonObject;
 
-public class Poisson extends Family {
+public class Link extends PythonObject {
 
-	public Poisson(String module, String name){
+	public Link(String module, String name){
 		super(module, name);
+	}
+
+	public Number getPower(){
+		return (Number)getOptionalScalar("power");
 	}
 }
