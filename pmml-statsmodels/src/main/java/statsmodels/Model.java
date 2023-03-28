@@ -53,36 +53,36 @@ public class Model extends PythonObject {
 	public Schema encodeSchema(StatsModelsEncoder encoder){
 		ModelData data = getData();
 
-		List<String> xNames;
-		List<String> yNames;
+		List<String> endogNames;
+		List<String> exogNames;
 
 		ModelData.Cache cache = data.getCache();
 		if(cache.hasNames()){
-			xNames = cache.getXNames();
-			yNames = cache.getYNames();
+			endogNames = cache.getYNames();
+			exogNames = cache.getXNames();
 		} else
 
 		{
-			xNames = data.getExogNames();
-			yNames = data.getEndogNames();
+			endogNames = data.getEndogNames();
+			exogNames = data.getExogNames();
 		}
 
-		Label label = encodeLabel(yNames, encoder);
+		Label label = encodeLabel(endogNames, encoder);
 
-		List<Feature> features = encodeFeatures(xNames, encoder);
+		List<Feature> features = encodeFeatures(exogNames, encoder);
 
 		return new Schema(encoder, label, features);
 	}
 
-	public Label encodeLabel(List<String> yNames, StatsModelsEncoder encoder){
-		String yName = Iterables.getOnlyElement(yNames);
+	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
+		String endogName = Iterables.getOnlyElement(endogNames);
 
-		DataField dataField = encoder.createDataField(yName, OpType.CONTINUOUS, DataType.DOUBLE);
+		DataField dataField = encoder.createDataField(endogName, OpType.CONTINUOUS, DataType.DOUBLE);
 
 		return new ContinuousLabel(dataField);
 	}
 
-	public List<Feature> encodeFeatures(List<String> xNames, StatsModelsEncoder encoder){
+	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
 		Integer kConstant = getKConstant();
 
 		List<Feature> features = new ArrayList<>();
@@ -106,23 +106,23 @@ public class Model extends PythonObject {
 
 		boolean isFormula = false;
 
-		for(int i = 0; i < xNames.size(); i++){
-			String xName = xNames.get(i);
+		for(int i = 0; i < exogNames.size(); i++){
+			String exogName = exogNames.get(i);
 
 			if((i == 0) && (expectIntercept)){
-				interceptMatcher = interceptMatcher.reset(xName);
+				interceptMatcher = interceptMatcher.reset(exogName);
 
 				if(interceptMatcher.matches()){
 					isFormula = true;
 
-					features.add(new InterceptFeature(encoder, xName, DataType.DOUBLE));
+					features.add(new InterceptFeature(encoder, exogName, DataType.DOUBLE));
 
 					continue;
 				}
 			} // End if
 
 			if(i >= 0){
-				binaryIndicatorMatcher = binaryIndicatorMatcher.reset(xName);
+				binaryIndicatorMatcher = binaryIndicatorMatcher.reset(exogName);
 
 				if(binaryIndicatorMatcher.matches()){
 					String name = binaryIndicatorMatcher.group(1);
@@ -141,12 +141,12 @@ public class Model extends PythonObject {
 				} else
 
 				{
-					if(("const").equals(xName) && (expectIntercept)){
-						features.add(new InterceptFeature(encoder, xName, DataType.STRING));
+					if(("const").equals(exogName) && (expectIntercept)){
+						features.add(new InterceptFeature(encoder, exogName, DataType.STRING));
 					} else
 
 					{
-						DataField dataField = encoder.createDataField(xName, OpType.CONTINUOUS, DataType.DOUBLE);
+						DataField dataField = encoder.createDataField(exogName, OpType.CONTINUOUS, DataType.DOUBLE);
 
 						features.add(new ContinuousFeature(encoder, dataField));
 					}
