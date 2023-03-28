@@ -53,10 +53,19 @@ public class Model extends PythonObject {
 	public Schema encodeSchema(StatsModelsEncoder encoder){
 		ModelData data = getData();
 
-		ModelData.Cache cache = data.getCache();
+		List<String> xNames;
+		List<String> yNames;
 
-		List<String> xNames = cache.getXNames();
-		List<String> yNames = cache.getYNames();
+		ModelData.Cache cache = data.getCache();
+		if(cache.hasNames()){
+			xNames = cache.getXNames();
+			yNames = cache.getYNames();
+		} else
+
+		{
+			xNames = data.getExogNames();
+			yNames = data.getEndogNames();
+		}
 
 		Label label = encodeLabel(yNames, encoder);
 

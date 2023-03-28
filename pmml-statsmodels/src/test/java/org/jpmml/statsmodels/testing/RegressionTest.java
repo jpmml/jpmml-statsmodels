@@ -34,6 +34,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	}
 
 	@Test
+	public void evaluateGLMElasticNetAuto() throws Exception {
+		evaluate("GLMElasticNet", AUTO);
+	}
+
+	@Test
 	public void evaluateGLMFormulaAuto() throws Exception {
 		evaluate("GLMFormula", AUTO);
 	}
@@ -49,6 +54,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	}
 
 	@Test
+	public void evaluateOLSElasticNetAuto() throws Exception {
+		evaluate("OLSElasticNet", AUTO);
+	}
+
+	@Test
 	public void evaluateOLSFormulaAuto() throws Exception {
 		evaluate("OLSFormula", AUTO);
 	}
@@ -61,6 +71,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	@Test
 	public void evaluateWLSConstAuto() throws Exception {
 		evaluate("WLSConst", AUTO);
+	}
+
+	@Test
+	public void evaluateWLSElasticNetAuto() throws Exception {
+		evaluate("WLSElasticNet", AUTO);
 	}
 
 	@Test

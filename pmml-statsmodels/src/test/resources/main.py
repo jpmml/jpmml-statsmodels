@@ -17,7 +17,7 @@ def store_csv(df, name):
 	df.to_csv("csv/" + name + ".csv", index = False)
 
 def store_pkl(results, name):
-	results.save("pkl/" + name + ".pkl", remove_data = True)
+	results.save("pkl/" + name + ".pkl", remove_data = hasattr(results, "remove_data"))
 
 audit_df = load_csv("Audit")
 print(audit_df.dtypes)
@@ -28,7 +28,10 @@ audit_formula = "Adjusted ~ Age + C(Employment) + C(Education) + C(Marital) + C(
 
 def build_audit(model, name, fit_method = "fit"):
 	results = getattr(model, fit_method)()
-	print(results.summary())
+	try:
+		print(results.summary())
+	except NotImplementedError:
+		pass
 
 	store_pkl(results, name)
 
@@ -39,13 +42,15 @@ def build_audit(model, name, fit_method = "fit"):
 build_audit(glm(formula = audit_formula, data = audit_df, family = Binomial()), "GLMFormulaAudit")
 build_audit(logit(formula = audit_formula, data = audit_df), "LogitFormulaAudit")
 
+build_audit(logit(formula = audit_formula, data = audit_df), "LogitLassoFormulaAudit", fit_method = "fit_regularized")
+
 iris_df = load_csv("Iris")
 print(iris_df.dtypes)
 
 iris_X, iris_y = split_csv(iris_df)
 
-def build_iris(model, name, fit_method = "fit"):
-	results = getattr(model, fit_method)(method = "bfgs")
+def build_iris(model, name, fit_method = "fit", **fit_params):
+	results = getattr(model, fit_method)(**fit_params)
 	print(results.summary())
 
 	store_pkl(results, name)
@@ -58,7 +63,9 @@ build_iris(MNLogit(iris_y, iris_X), "MNLogitIris")
 
 iris_X = add_constant(iris_X)
 
-build_iris(MNLogit(iris_y, iris_X), "MNLogitConstIris")
+build_iris(MNLogit(iris_y, iris_X), "MNLogitConstIris", method = "bfgs")
+
+build_iris(MNLogit(iris_y, iris_X), "MNLogitLassoIris", fit_method = "fit_regularized")
 
 auto_df = load_csv("Auto")
 print(auto_df.dtypes)
@@ -69,7 +76,10 @@ auto_formula = "mpg ~ C(cylinders) + displacement + horsepower + weight + accele
 
 def build_auto(model, name, fit_method = "fit"):
 	results = getattr(model, fit_method)()
-	print(results.summary())
+	try:
+		print(results.summary())
+	except NotImplementedError:
+		pass
 
 	store_pkl(results, name)
 
@@ -89,6 +99,10 @@ auto_X = add_constant(auto_X)
 build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMConstAuto")
 build_auto(OLS(auto_y, auto_X), "OLSConstAuto")
 build_auto(WLS(auto_y, auto_X), "WLSConstAuto")
+
+build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMElasticNetAuto", fit_method = "fit_regularized")
+build_auto(OLS(auto_y, auto_X), "OLSElasticNetAuto", fit_method = "fit_regularized")
+build_auto(WLS(auto_y, auto_X), "WLSElasticNetAuto", fit_method = "fit_regularized")
 
 visit_df = load_csv("Visit")
 print(visit_df.dtypes)

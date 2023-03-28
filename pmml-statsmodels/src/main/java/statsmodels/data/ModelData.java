@@ -23,11 +23,38 @@ import java.util.List;
 import java.util.Map;
 
 import org.jpmml.python.PythonObject;
+import pandas.core.BlockManager;
+import pandas.core.DataFrame;
+import pandas.core.Index;
+import pandas.core.Series;
 
 public class ModelData extends PythonObject {
 
 	public ModelData(String module, String name){
 		super(module, name);
+	}
+
+	public List<String> getEndogNames(){
+		Series origEndog = getOrigEndog();
+
+		return Collections.singletonList(origEndog.getName());
+	}
+
+	public List<String> getExogNames(){
+		DataFrame origExog = getOrigExog();
+
+		BlockManager data = origExog.getData();
+
+		List<Index> axes = data.getAxesArray();
+		if(axes.size() != 2){
+			throw new IllegalArgumentException();
+		}
+
+		Index columnAxis = axes.get(0);
+		Index rowAxis = axes.get(1);
+
+		// XXX
+		return (List)columnAxis.getValues();
 	}
 
 	public Cache getCache(){
@@ -39,10 +66,22 @@ public class ModelData extends PythonObject {
 		return cache;
 	}
 
+	public Series getOrigEndog(){
+		return get("orig_endog", Series.class);
+	}
+
+	public DataFrame getOrigExog(){
+		return get("orig_exog", DataFrame.class);
+	}
+
 	public class Cache extends PythonObject {
 
 		public Cache(String module, String name){
 			super(module, name);
+		}
+
+		public boolean hasNames(){
+			return containsKey("xnames") && containsKey("ynames");
 		}
 
 		public List<String> getXNames(){

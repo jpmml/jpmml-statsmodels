@@ -35,6 +35,11 @@ public class ClassificationTest extends StatsModelsEncoderBatchTest implements D
 	}
 
 	@Test
+	public void evaluateLogitLassoFormulaAudit() throws Exception {
+		evaluate("LogitLassoFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+	}
+
+	@Test
 	public void evaluateMNLogitIris() throws Exception {
 		evaluate("MNLogit", IRIS, excludeFields(IRIS_SPECIES));
 	}
@@ -42,5 +47,10 @@ public class ClassificationTest extends StatsModelsEncoderBatchTest implements D
 	@Test
 	public void evaluateMNLogitConstIris() throws Exception {
 		evaluate("MNLogitConst", IRIS, excludeFields(IRIS_SPECIES));
+	}
+
+	@Test
+	public void evaluateMNLogitLassoIris() throws Exception {
+		evaluate("MNLogitLasso", IRIS, excludeFields(IRIS_SPECIES));
 	}
 }
