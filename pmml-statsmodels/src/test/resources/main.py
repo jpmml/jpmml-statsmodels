@@ -26,8 +26,8 @@ audit_X, audit_y = split_csv(audit_df)
 
 audit_formula = "Adjusted ~ Age + C(Employment) + C(Education) + C(Marital) + C(Occupation) + Income + Hours"
 
-def build_audit(model, name):
-	results = model.fit()
+def build_audit(model, name, fit_method = "fit"):
+	results = getattr(model, fit_method)()
 	print(results.summary())
 
 	store_pkl(results, name)
@@ -44,8 +44,8 @@ print(iris_df.dtypes)
 
 iris_X, iris_y = split_csv(iris_df)
 
-def build_iris(model, name):
-	results = model.fit(method = "bfgs")
+def build_iris(model, name, fit_method = "fit"):
+	results = getattr(model, fit_method)(method = "bfgs")
 	print(results.summary())
 
 	store_pkl(results, name)
@@ -67,8 +67,8 @@ auto_X, auto_y = split_csv(auto_df)
 
 auto_formula = "mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + C(model_year) + C(origin)"
 
-def build_auto(model, name):
-	results = model.fit()
+def build_auto(model, name, fit_method = "fit"):
+	results = getattr(model, fit_method)()
 	print(results.summary())
 
 	store_pkl(results, name)
@@ -97,8 +97,8 @@ visit_X, visit_y = split_csv(visit_df)
 
 visit_formula = "docvis ~ C(edlevel) + C(outwork) + C(female) + C(married) + C(kids) + hhninc + educ + C(self)"
 
-def build_visit(model, name):
-	results = model.fit()
+def build_visit(model, name, fit_method = "fit"):
+	results = getattr(model, fit_method)()
 	print(results.summary())
 
 	store_pkl(results, name)
