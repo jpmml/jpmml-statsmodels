@@ -148,7 +148,10 @@ public class GLM extends RegressionModel {
 		String linkName = link.getPythonName();
 
 		switch(linkName){
+			// StatsModels 0.13.5
 			case "identity":
+			// StatsModels 0.14.0+
+			case "Identity":
 				return GeneralRegressionModel.LinkFunction.IDENTITY;
 			case "Log":
 				return GeneralRegressionModel.LinkFunction.LOG;
@@ -164,7 +167,10 @@ public class GLM extends RegressionModel {
 		String linkName = link.getPythonName();
 
 		switch(linkName){
+			// StatsModels 0.13.5
 			case "identity":
+			// StatsModels 0.14.0+
+			case "Identity":
 			case "Log":
 			case "Logit":
 				return null;
