@@ -165,6 +165,14 @@ public class Model extends PythonObject {
 		return getInteger("k_constant");
 	}
 
+	public Integer getKExtra(){
+		return getInteger("k_extra");
+	}
+
+	public Integer getKVars(){
+		return getInteger("k_vars");
+	}
+
 	static
 	protected List<? extends Feature> dropInterceptFeature(List<? extends Feature> features, int index){
 		Feature feature = features.get(index);

@@ -1,9 +1,12 @@
 from pandas import DataFrame
+from sklearn.preprocessing import KBinsDiscretizer
 from statsmodels.api import GLM, MNLogit, OLS, WLS
 from statsmodels.formula.api import glm, logit, ols, poisson, wls
 from statsmodels.genmod.families import Binomial, Gaussian, Poisson
+from statsmodels.miscmodels.ordinal_model import OrderedModel
 from statsmodels.tools import add_constant
 
+import numpy
 import pandas
 
 def load_csv(name):
@@ -103,6 +106,25 @@ build_auto(WLS(auto_y, auto_X), "WLSConstAuto")
 build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMElasticNetAuto", fit_method = "fit_regularized")
 build_auto(OLS(auto_y, auto_X), "OLSElasticNetAuto", fit_method = "fit_regularized")
 build_auto(WLS(auto_y, auto_X), "WLSElasticNetAuto", fit_method = "fit_regularized")
+
+def build_auto_ord(model, name, fit_method = "fit"):
+	results = getattr(model, fit_method)()
+	print(results.summary())
+
+	store_pkl(results, name)
+
+	mpg_bin_proba = DataFrame(numpy.asarray(results.predict(auto_X)), columns = ["probability({})".format(mpg_bin) for mpg_bin in [0, 1, 2]])
+	store_csv(mpg_bin_proba, name)
+
+auto_X, auto_y = split_csv(auto_df)
+
+# Transform label from continuous to ordinal
+discretizer = KBinsDiscretizer(n_bins = 3, strategy = "kmeans", encode = "ordinal")
+
+auto_y = discretizer.fit_transform(auto_y.values.reshape(-1, 1))
+
+build_auto_ord(OrderedModel(auto_y, auto_X, distr = "logit"), "OrderedLogitAuto")
+build_auto_ord(OrderedModel(auto_y, auto_X, distr = "probit"), "OrderedProbitAuto")
 
 visit_df = load_csv("Visit")
 print(visit_df.dtypes)

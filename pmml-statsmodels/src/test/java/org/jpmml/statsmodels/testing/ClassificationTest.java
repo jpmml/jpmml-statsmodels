@@ -20,6 +20,7 @@ package org.jpmml.statsmodels.testing;
 
 import org.jpmml.converter.testing.Datasets;
 import org.jpmml.converter.testing.Fields;
+import org.jpmml.evaluator.testing.PMMLEquivalence;
 import org.junit.Test;
 
 public class ClassificationTest extends StatsModelsEncoderBatchTest implements Datasets, Fields {
@@ -52,5 +53,15 @@ public class ClassificationTest extends StatsModelsEncoderBatchTest implements D
 	@Test
 	public void evaluateMNLogitLassoIris() throws Exception {
 		evaluate("MNLogitLasso", IRIS, excludeFields(IRIS_SPECIES));
+	}
+
+	@Test
+	public void evaluateOrderedLogitAuto() throws Exception {
+		evaluate("OrderedLogit", AUTO, excludeFields("y"));
+	}
+
+	@Test
+	public void evaluateOrderedProbitAuto() throws Exception {
+		evaluate("OrderedProbit", AUTO, excludeFields("y"), new PMMLEquivalence(1e-10, 1e-10));
 	}
 }
