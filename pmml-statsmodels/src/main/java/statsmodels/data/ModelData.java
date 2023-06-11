@@ -45,13 +45,7 @@ public class ModelData extends PythonObject {
 
 		BlockManager data = origExog.getData();
 
-		List<Index> axes = data.getAxesArray();
-		if(axes.size() != 2){
-			throw new IllegalArgumentException();
-		}
-
-		Index columnAxis = axes.get(0);
-		Index rowAxis = axes.get(1);
+		Index columnAxis = data.getColumnAxis();
 
 		// XXX
 		return (List)columnAxis.getValues();
