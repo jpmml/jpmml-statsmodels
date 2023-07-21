@@ -20,29 +20,26 @@ package statsmodels.miscmodels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
 import org.dmg.pmml.DataField;
 import org.dmg.pmml.DataType;
 import org.dmg.pmml.DerivedField;
-import org.dmg.pmml.MiningFunction;
 import org.dmg.pmml.OpType;
 import org.dmg.pmml.OutputField;
 import org.dmg.pmml.mining.Segmentation;
 import org.dmg.pmml.regression.RegressionModel;
-import org.dmg.pmml.regression.RegressionTable;
 import org.jpmml.converter.ContinuousFeature;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelEncoder;
 import org.jpmml.converter.ModelUtil;
+import org.jpmml.converter.OrdinalLabel;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.ValueUtil;
 import org.jpmml.converter.mining.MiningModelUtil;
 import org.jpmml.converter.regression.RegressionModelUtil;
-import org.jpmml.statsmodels.OrdinalLabel;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import scipy.stats.RVContinuous;
 import statsmodels.Model;
@@ -98,25 +95,7 @@ public class OrderedModel extends Model {
 
 		Feature feature = new ContinuousFeature(encoder, linpredField);
 
-		List<RegressionTable> regressionTables = new ArrayList<>();
-
-		for(int i = 0; i < thresholds.size(); i++){
-			RegressionTable regressionTable = RegressionModelUtil.createRegressionTable(Collections.singletonList(feature), Collections.singletonList(-1d), thresholds.get(i))
-				.setTargetCategory(ordinalLabel.getValue(i));
-
-			regressionTables.add(regressionTable);
-		}
-
-		{
-			RegressionTable regressionTable = RegressionModelUtil.createRegressionTable(Collections.emptyList(), Collections.emptyList(), 1000d)
-				.setTargetCategory(ordinalLabel.getValue(kLevels - 1));
-
-			regressionTables.add(regressionTable);
-		}
-
-		RegressionModel secondRegressionModel = new RegressionModel(MiningFunction.CLASSIFICATION, ModelUtil.createMiningSchema(ordinalLabel), regressionTables)
-			.setNormalizationMethod(parseNormalizationMethod(distr))
-			.setOutput(ModelUtil.createProbabilityOutput(DataType.DOUBLE, ordinalLabel.toCategoricalLabel()));
+		RegressionModel secondRegressionModel = RegressionModelUtil.createOrdinalClassification(feature, thresholds, parseNormalizationMethod(distr), true, schema);
 
 		return MiningModelUtil.createModelChain(Arrays.asList(firstRegressionModel, secondRegressionModel), Segmentation.MissingPredictionTreatment.RETURN_MISSING);
 	}
