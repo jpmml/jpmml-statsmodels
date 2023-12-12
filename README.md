@@ -78,6 +78,11 @@ Getting help:
 java -jar pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.0-SNAPSHOT.jar --help
 ```
 
+# Documentation #
+
+* [Training Scikit-Learn GridSearchCV StatsModels pipelines](https://openscoring.io/blog/2023/10/15/sklearn_statsmodels_gridsearchcv_pipeline/)
+* [Training Scikit-Learn StatsModels pipelines](https://openscoring.io/blog/2023/03/28/sklearn_statsmodels_pipeline/)
+
 # License #
 
 JPMML-StatsModels is licensed under the terms and conditions of the [GNU Affero General Public License, Version 3.0](https://www.gnu.org/licenses/agpl-3.0.html).
