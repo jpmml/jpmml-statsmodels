@@ -32,8 +32,8 @@ import org.jpmml.converter.BinaryFeature;
 import org.jpmml.converter.ContinuousFeature;
 import org.jpmml.converter.ContinuousLabel;
 import org.jpmml.converter.Feature;
+import org.jpmml.converter.FieldUtil;
 import org.jpmml.converter.Label;
-import org.jpmml.converter.PMMLUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.InterceptFeature;
@@ -134,7 +134,7 @@ public class Model extends PythonObject {
 					} // End if
 
 					if(!isFormula){
-						PMMLUtil.addValues(dataField, Collections.singletonList(value));
+						FieldUtil.addValues(dataField, Collections.singletonList(value));
 					}
 
 					features.add(new BinaryFeature(encoder, dataField, value));

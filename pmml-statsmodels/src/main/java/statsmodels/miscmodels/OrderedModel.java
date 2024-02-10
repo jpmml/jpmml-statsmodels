@@ -31,6 +31,7 @@ import org.dmg.pmml.OutputField;
 import org.dmg.pmml.mining.Segmentation;
 import org.dmg.pmml.regression.RegressionModel;
 import org.jpmml.converter.ContinuousFeature;
+import org.jpmml.converter.ContinuousLabel;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelEncoder;
@@ -87,7 +88,8 @@ public class OrderedModel extends Model {
 
 		Schema segmentSchema = schema.toAnonymousRegressorSchema(DataType.DOUBLE);
 
-		RegressionModel firstRegressionModel = RegressionModelUtil.createRegression(features, varsParams, (offset != null ? offset : 0d), RegressionModel.NormalizationMethod.NONE, segmentSchema);
+		RegressionModel firstRegressionModel = RegressionModelUtil.createRegression(features, varsParams, (offset != null ? offset : 0d), RegressionModel.NormalizationMethod.NONE, segmentSchema)
+			.setTargets(ModelUtil.createRescaleTargets(-1d, null, (ContinuousLabel)segmentSchema.getLabel()));
 
 		OutputField linpredOutputField = ModelUtil.createPredictedField("linpred", OpType.CONTINUOUS, DataType.DOUBLE);
 
