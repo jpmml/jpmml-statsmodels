@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from sklearn.preprocessing import KBinsDiscretizer
-from statsmodels.api import GLM, MNLogit, OLS, WLS
-from statsmodels.formula.api import glm, logit, ols, poisson, wls
+from statsmodels.api import GLM, MNLogit, OLS, QuantReg, WLS
+from statsmodels.formula.api import glm, logit, ols, poisson, quantreg, wls
 from statsmodels.genmod.families import Binomial, Gaussian, Poisson
 from statsmodels.miscmodels.ordinal_model import OrderedModel
 from statsmodels.tools import add_constant
@@ -77,8 +77,8 @@ auto_X, auto_y = split_csv(auto_df)
 
 auto_formula = "mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + C(model_year) + C(origin)"
 
-def build_auto(model, name, fit_method = "fit"):
-	results = getattr(model, fit_method)()
+def build_auto(model, name, fit_method = "fit", **fit_params):
+	results = getattr(model, fit_method)(**fit_params)
 	try:
 		print(results.summary())
 	except NotImplementedError:
@@ -91,16 +91,19 @@ def build_auto(model, name, fit_method = "fit"):
 
 build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMAuto")
 build_auto(OLS(auto_y, auto_X), "OLSAuto")
+build_auto(QuantReg(auto_y, auto_X), "QuantReg95Auto", q = 0.95)
 build_auto(WLS(auto_y, auto_X), "WLSAuto")
 
 build_auto(glm(formula = auto_formula, data = auto_df, family = Gaussian()), "GLMFormulaAuto")
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaAuto")
+build_auto(quantreg(formula = auto_formula, data = auto_df), "QuantRegFormula95Auto", q = 0.95)
 build_auto(wls(formula = auto_formula, data = auto_df), "WLSFormulaAuto")
 
 auto_X = add_constant(auto_X)
 
 build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMConstAuto")
 build_auto(OLS(auto_y, auto_X), "OLSConstAuto")
+build_auto(QuantReg(auto_y, auto_X), "QuantReg5Auto", q = 0.05)
 build_auto(WLS(auto_y, auto_X), "WLSConstAuto")
 
 build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMElasticNetAuto", fit_method = "fit_regularized")

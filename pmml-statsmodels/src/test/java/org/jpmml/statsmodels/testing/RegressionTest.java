@@ -64,6 +64,21 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	}
 
 	@Test
+	public void evaluateQuantReg5Auto() throws Exception {
+		evaluate("QuantReg5", AUTO);
+	}
+
+	@Test
+	public void evaluateQuantReg95Auto() throws Exception {
+		evaluate("QuantReg95", AUTO);
+	}
+
+	@Test
+	public void evaluateQuantRegFormula95Auto() throws Exception {
+		evaluate("QuantRegFormula95", AUTO);
+	}
+
+	@Test
 	public void evaluateWLSAuto() throws Exception {
 		evaluate("WLS", AUTO);
 	}

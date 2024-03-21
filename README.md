@@ -8,6 +8,7 @@ Java library and command-line application for converting [StatsModels](https://w
 * Supported model types:
   * Linear Regression:
     * [Ordinary Least Squares](https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.OLS.html)
+    * [Quantile Regression](https://www.statsmodels.org/dev/generated/statsmodels.regression.quantile_regression.QuantReg.html)
     * [Weighted Least Squares](https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.WLS.html)
   * Generalized Linear Regression:
     * [Generalized Linear Models](https://www.statsmodels.org/stable/generated/statsmodels.genmod.generalized_linear_model.GLM.html):
