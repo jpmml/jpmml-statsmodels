@@ -48,6 +48,10 @@
 		<url>https://github.com/jpmml/jpmml-statsmodels/issues</url>
 	</issueManagement>
 
+    <properties>
+		<project.build.outputTimestamp>2024-03-22T06:57:04Z</project.build.outputTimestamp>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
