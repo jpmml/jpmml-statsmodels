@@ -48,6 +48,10 @@
 		<url>https://github.com/jpmml/jpmml-statsmodels/issues</url>
 	</issueManagement>
 
+	<properties>
+		<project.build.outputTimestamp>2024-04-02T09:00:00Z</project.build.outputTimestamp>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -98,7 +102,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.12.1</version>
+				<version>3.13.0</version>
 				<configuration>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
