@@ -52,10 +52,10 @@ public class ModelData extends PythonObject {
 	}
 
 	public Cache getCache(){
-		Map<String, ?> map = get("_cache", Map.class);
+		Map<String, ?> dict = getDict("_cache");
 
 		Cache cache = new Cache(getPythonModule() + "." + getPythonName(), "_cache");
-		cache.putAll(map);
+		cache.update(dict);
 
 		return cache;
 	}
@@ -75,21 +75,21 @@ public class ModelData extends PythonObject {
 		}
 
 		public boolean hasNames(){
-			return containsKey("xnames") && containsKey("ynames");
+			return hasattr("xnames") && hasattr("ynames");
 		}
 
 		public List<String> getXNames(){
-			return getList("xnames", String.class);
+			return getStringList("xnames");
 		}
 
 		public List<String> getYNames(){
-			Object yNames = get("ynames");
+			Object yNames = getObject("ynames");
 
 			if(yNames instanceof String){
 				return Collections.singletonList((String)yNames);
 			}
 
-			return getList("ynames", String.class);
+			return getStringList("ynames");
 		}
 	}
 }

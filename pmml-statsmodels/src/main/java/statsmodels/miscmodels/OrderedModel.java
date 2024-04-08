@@ -130,7 +130,7 @@ public class OrderedModel extends Model {
 		return getInteger("k_levels");
 	}
 
-	public List<? extends Number> getLabels(){
+	public List<Number> getLabels(){
 		return getNumberArray("labels");
 	}
 
