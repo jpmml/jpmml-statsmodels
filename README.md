@@ -27,6 +27,7 @@ Java library and command-line application for converting [StatsModels](https://w
 # Installation #
 
 Enter the project root directory and build using [Apache Maven](https://maven.apache.org/):
+
 ```
 mvn clean install
 ```
@@ -39,7 +40,7 @@ A typical workflow can be summarized as follows:
 
 1. Use Python to fit a model.
 2. Save the model fitting results in `pickle` data format to a file in a local filesystem.
-3. Use the JPMML-StatsModels command-line converter application to turn the pickle file to a PMML file.
+3. Use the JPMML-StatsModels command-line converter application to turn the Pickle file to a PMML file.
 
 ### The Python side of operations
 
@@ -69,12 +70,14 @@ results.save("model.pkl", remove_data = True)
 
 ### The JPMML-StatsModels side of operations
 
-Converting the model fitting results pickle file `model.pkl` to a PMML file `model.pmml`:
+Converting the model fitting results Pickle file `model.pkl` to a PMML file `model.pmml`:
+
 ```
 java -jar pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.1-SNAPSHOT.jar --pkl-input model.pkl --pmml-output model.pmml
 ```
 
 Getting help:
+
 ```
 java -jar pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.1-SNAPSHOT.jar --help
 ```
