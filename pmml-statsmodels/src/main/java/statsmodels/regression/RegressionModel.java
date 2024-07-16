@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
-import org.jpmml.converter.PMMLEncoder;
+import org.jpmml.converter.ModelEncoder;
 import org.jpmml.converter.Schema;
 import statsmodels.Model;
 
@@ -41,8 +41,7 @@ public class RegressionModel extends Model {
 	public org.dmg.pmml.Model encodeModel(List<? extends Number> params, Schema schema){
 		Integer kConstant = getKConstant();
 
-		PMMLEncoder encoder = schema.getEncoder();
-
+		ModelEncoder encoder = schema.getEncoder();
 		Label label = schema.getLabel();
 		List<? extends Feature> features = schema.getFeatures();
 

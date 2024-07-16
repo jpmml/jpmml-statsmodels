@@ -62,8 +62,7 @@ public class OrderedModel extends Model {
 			throw new IllegalArgumentException();
 		}
 
-		ModelEncoder encoder = (ModelEncoder)schema.getEncoder();
-
+		ModelEncoder encoder = schema.getEncoder();
 		OrdinalLabel ordinalLabel = (OrdinalLabel)schema.getLabel();
 		List<? extends Feature> features = schema.getFeatures();
 
