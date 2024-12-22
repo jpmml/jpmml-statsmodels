@@ -33,6 +33,9 @@ public class Model extends PythonObject {
 	abstract
 	public Schema encodeSchema(StatsModelsEncoder encoder);
 
+	abstract
+	public org.dmg.pmml.Model encodeModel(Results results, Schema schema);
+
 	public ModelData getData(){
 		return get("data", ModelData.class);
 	}

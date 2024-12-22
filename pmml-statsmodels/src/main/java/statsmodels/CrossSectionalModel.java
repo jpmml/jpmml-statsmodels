@@ -74,6 +74,13 @@ public class CrossSectionalModel extends Model {
 		return new Schema(encoder, label, features);
 	}
 
+	@Override
+	public org.dmg.pmml.Model encodeModel(Results results, Schema schema){
+		List<Number> params = results.getParams();
+
+		return encodeModel(params, schema);
+	}
+
 	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
 		String endogName = Iterables.getOnlyElement(endogNames);
 

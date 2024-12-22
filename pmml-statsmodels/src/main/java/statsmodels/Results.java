@@ -36,19 +36,7 @@ public class Results extends PythonObject {
 
 		Schema schema = model.encodeSchema(encoder);
 
-		org.dmg.pmml.Model pmmlModel;
-
-		if(model instanceof CrossSectionalModel){
-			CrossSectionalModel crossSectionalModel = (CrossSectionalModel)model;
-
-			List<Number> params = getParams();
-
-			pmmlModel = crossSectionalModel.encodeModel(params, schema);
-		} else
-
-		{
-			throw new IllegalArgumentException();
-		}
+		org.dmg.pmml.Model pmmlModel = model.encodeModel(this, schema);
 
 		ensureAlgorithmName(pmmlModel, model.getClassName());
 
@@ -58,19 +46,7 @@ public class Results extends PythonObject {
 	public org.dmg.pmml.Model encodeModel(Schema schema){
 		Model model = getModel();
 
-		org.dmg.pmml.Model pmmlModel;
-
-		if(model instanceof CrossSectionalModel){
-			CrossSectionalModel crossSectionalModel = (CrossSectionalModel)model;
-
-			List<Number> params = getParams();
-
-			pmmlModel = crossSectionalModel.encodeModel(params, schema);
-		} else
-
-		{
-			throw new IllegalArgumentException();
-		}
+		org.dmg.pmml.Model pmmlModel = model.encodeModel(this, schema);
 
 		ensureAlgorithmName(pmmlModel, model.getClassName());
 
