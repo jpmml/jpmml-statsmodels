@@ -33,11 +33,22 @@ public class Results extends PythonObject {
 
 	public PMML encodePMML(StatsModelsEncoder encoder){
 		Model model = getModel();
-		List<Number> params = getParams();
 
 		Schema schema = model.encodeSchema(encoder);
 
-		org.dmg.pmml.Model pmmlModel = model.encodeModel(params, schema);
+		org.dmg.pmml.Model pmmlModel;
+
+		if(model instanceof CrossSectionalModel){
+			CrossSectionalModel crossSectionalModel = (CrossSectionalModel)model;
+
+			List<Number> params = getParams();
+
+			pmmlModel = crossSectionalModel.encodeModel(params, schema);
+		} else
+
+		{
+			throw new IllegalArgumentException();
+		}
 
 		ensureAlgorithmName(pmmlModel, model.getClassName());
 
@@ -46,9 +57,20 @@ public class Results extends PythonObject {
 
 	public org.dmg.pmml.Model encodeModel(Schema schema){
 		Model model = getModel();
-		List<Number> params = getParams();
 
-		org.dmg.pmml.Model pmmlModel = model.encodeModel(params, schema);
+		org.dmg.pmml.Model pmmlModel;
+
+		if(model instanceof CrossSectionalModel){
+			CrossSectionalModel crossSectionalModel = (CrossSectionalModel)model;
+
+			List<Number> params = getParams();
+
+			pmmlModel = crossSectionalModel.encodeModel(params, schema);
+		} else
+
+		{
+			throw new IllegalArgumentException();
+		}
 
 		ensureAlgorithmName(pmmlModel, model.getClassName());
 

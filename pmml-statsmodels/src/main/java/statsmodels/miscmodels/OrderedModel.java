@@ -43,9 +43,9 @@ import org.jpmml.converter.mining.MiningModelUtil;
 import org.jpmml.converter.regression.RegressionModelUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import scipy.stats.RVContinuous;
-import statsmodels.Model;
+import statsmodels.CrossSectionalModel;
 
-public class OrderedModel extends Model {
+public class OrderedModel extends CrossSectionalModel {
 
 	public OrderedModel(String module, String name){
 		super(module, name);

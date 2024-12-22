@@ -25,10 +25,10 @@ import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelEncoder;
 import org.jpmml.converter.Schema;
-import statsmodels.Model;
+import statsmodels.CrossSectionalModel;
 
 abstract
-public class RegressionModel extends Model {
+public class RegressionModel extends CrossSectionalModel {
 
 	public RegressionModel(String module, String name){
 		super(module, name);

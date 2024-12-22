@@ -30,10 +30,10 @@ import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.TypeUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
-import statsmodels.Model;
+import statsmodels.CrossSectionalModel;
 
 abstract
-public class MultinomialRegressionModel extends Model {
+public class MultinomialRegressionModel extends CrossSectionalModel {
 
 	public MultinomialRegressionModel(String module, String name){
 		super(module, name);

@@ -18,25 +18,8 @@
  */
 package statsmodels;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.google.common.collect.Iterables;
-import org.dmg.pmml.DataField;
-import org.dmg.pmml.DataType;
-import org.dmg.pmml.OpType;
-import org.jpmml.converter.BinaryFeature;
-import org.jpmml.converter.ContinuousFeature;
-import org.jpmml.converter.ContinuousLabel;
-import org.jpmml.converter.Feature;
-import org.jpmml.converter.FieldUtil;
-import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
-import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import statsmodels.data.ModelData;
 
@@ -48,114 +31,7 @@ public class Model extends PythonObject {
 	}
 
 	abstract
-	public org.dmg.pmml.Model encodeModel(List<? extends Number> params, Schema schema);
-
-	public Schema encodeSchema(StatsModelsEncoder encoder){
-		ModelData data = getData();
-
-		List<String> endogNames;
-		List<String> exogNames;
-
-		ModelData.Cache cache = data.getCache();
-		if(cache.hasNames()){
-			endogNames = cache.getYNames();
-			exogNames = cache.getXNames();
-		} else
-
-		{
-			endogNames = data.getEndogNames();
-			exogNames = data.getExogNames();
-		}
-
-		Label label = encodeLabel(endogNames, encoder);
-
-		List<Feature> features = encodeFeatures(exogNames, encoder);
-
-		return new Schema(encoder, label, features);
-	}
-
-	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
-		String endogName = Iterables.getOnlyElement(endogNames);
-
-		DataField dataField = encoder.createDataField(endogName, OpType.CONTINUOUS, DataType.DOUBLE);
-
-		return new ContinuousLabel(dataField);
-	}
-
-	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
-		Integer kConstant = getKConstant();
-
-		List<Feature> features = new ArrayList<>();
-
-		Matcher interceptMatcher = Model.TERM_INTERCEPT.matcher("");
-		Matcher binaryIndicatorMatcher = Model.TERM_BINARY_INDICATOR.matcher("");
-
-		boolean expectIntercept;
-
-		if(kConstant == 0){
-			expectIntercept = false;
-		} else
-
-		if(kConstant == 1){
-			expectIntercept = true;
-		} else
-
-		{
-			throw new IllegalArgumentException();
-		}
-
-		boolean isFormula = false;
-
-		for(int i = 0; i < exogNames.size(); i++){
-			String exogName = exogNames.get(i);
-
-			if((i == 0) && (expectIntercept)){
-				interceptMatcher = interceptMatcher.reset(exogName);
-
-				if(interceptMatcher.matches()){
-					isFormula = true;
-
-					features.add(new InterceptFeature(encoder, exogName, DataType.DOUBLE));
-
-					continue;
-				}
-			} // End if
-
-			if(i >= 0){
-				binaryIndicatorMatcher = binaryIndicatorMatcher.reset(exogName);
-
-				if(binaryIndicatorMatcher.matches()){
-					String name = binaryIndicatorMatcher.group(1);
-					String value = binaryIndicatorMatcher.group(2);
-
-					DataField dataField = encoder.getDataField(name);
-					if(dataField == null){
-						dataField = encoder.createDataField(name, OpType.CATEGORICAL, DataType.STRING);
-					} // End if
-
-					if(!isFormula){
-						FieldUtil.addValues(dataField, Collections.singletonList(value));
-					}
-
-					features.add(new BinaryFeature(encoder, dataField, value));
-				} else
-
-				{
-					if(("const").equals(exogName) && (expectIntercept)){
-						features.add(new InterceptFeature(encoder, exogName, DataType.STRING));
-					} else
-
-					{
-						DataField dataField = encoder.createDataField(exogName, OpType.CONTINUOUS, DataType.DOUBLE);
-
-						features.add(new ContinuousFeature(encoder, dataField));
-					}
-				}
-			}
-		}
-
-		return features;
-	}
+	public Schema encodeSchema(StatsModelsEncoder encoder);
 
 	public ModelData getData(){
 		return get("data", ModelData.class);
@@ -172,25 +48,4 @@ public class Model extends PythonObject {
 	public Integer getKVars(){
 		return getInteger("k_vars");
 	}
-
-	static
-	protected List<? extends Feature> dropInterceptFeature(List<? extends Feature> features, int index){
-		Feature feature = features.get(index);
-
-		if(feature instanceof InterceptFeature){
-			InterceptFeature interceptFeature = (InterceptFeature)feature;
-
-			features = new ArrayList<>(features);
-			features.remove(interceptFeature);
-
-			return features;
-		} else
-
-		{
-			throw new IllegalArgumentException();
-		}
-	}
-
-	private static final Pattern TERM_INTERCEPT = Pattern.compile("Intercept");
-	private static final Pattern TERM_BINARY_INDICATOR = Pattern.compile("C\\((.+)\\)\\[T\\.(.+)\\]");
 }
