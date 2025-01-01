@@ -5,6 +5,7 @@ from statsmodels.formula.api import glm, logit, ols, poisson, quantreg, wls
 from statsmodels.genmod.families import Binomial, Gaussian, Poisson
 from statsmodels.miscmodels.ordinal_model import OrderedModel
 from statsmodels.tools import add_constant
+from statsmodels.tsa.arima.model import ARIMA
 
 import numpy
 import pandas
@@ -19,8 +20,29 @@ def split_csv(df):
 def store_csv(df, name):
 	df.to_csv("csv/" + name + ".csv", index = False)
 
-def store_pkl(results, name):
-	results.save("pkl/" + name + ".pkl", remove_data = hasattr(results, "remove_data"))
+def store_pkl(results, name, remove_data = None):
+	if remove_data:
+		remove_data &= hasattr(results, "remove_data")
+	results.save("pkl/" + name + ".pkl", remove_data = remove_data)
+
+airline_df = load_csv("Airline")
+airline_df["Month"] = pandas.to_datetime(airline_df["Month"])
+airline_df.set_index("Month", inplace = True)
+print(airline_df.dtypes)
+
+airline_y = airline_df["Passengers"]
+
+def build_airline(model, name, fit_method = "fit"):
+	results = getattr(model, fit_method)()
+	print(results.summary())
+
+	store_pkl(results, name, remove_data = False)
+
+	airline_passengers = results.predict(start = len(airline_y), end = len(airline_y) + 11)
+	airline_passengers.name = "Passengers"
+	store_csv(airline_passengers, name)
+
+build_airline(ARIMA(airline_y, order = (12, 0, 0)), "SSMAirline")
 
 audit_df = load_csv("Audit")
 print(audit_df.dtypes)

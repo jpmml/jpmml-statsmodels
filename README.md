@@ -20,6 +20,8 @@ Java library and command-line application for converting [StatsModels](https://w
     * [Poisson](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Poisson.html)
     * [OrderedModel](https://www.statsmodels.org/dev/generated/statsmodels.miscmodels.ordinal_model.OrderedModel.html):
       * Distributions: `logit`, `probit`
+  * Univariate Time-Series Analysis:
+    * [ARIMA](https://www.statsmodels.org/dev/generated/statsmodels.tsa.arima.model.ARIMA.html)
 * Production quality:
   * Complete test coverage.
   * Fully compliant with the [JPMML-Evaluator](https://github.com/jpmml/jpmml-evaluator) library.
