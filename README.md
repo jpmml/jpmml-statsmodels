@@ -34,7 +34,7 @@ Enter the project root directory and build using [Apache Maven](https://maven.ap
 mvn clean install
 ```
 
-The build produces a library JAR file `pmml-statsmodels/target/pmml-statsmodels-1.2-SNAPSHOT.jar`, and an executable uber-JAR file `pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.2-SNAPSHOT.jar`.
+The build produces a library JAR file `pmml-statsmodels/target/pmml-statsmodels-1.3-SNAPSHOT.jar`, and an executable uber-JAR file `pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.3-SNAPSHOT.jar`.
 
 # Usage #
 
@@ -75,13 +75,13 @@ results.save("model.pkl", remove_data = True)
 Converting the model fitting results Pickle file `model.pkl` to a PMML file `model.pmml`:
 
 ```
-java -jar pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.2-SNAPSHOT.jar --pkl-input model.pkl --pmml-output model.pmml
+java -jar pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.3-SNAPSHOT.jar --pkl-input model.pkl --pmml-output model.pmml
 ```
 
 Getting help:
 
 ```
-java -jar pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.2-SNAPSHOT.jar --help
+java -jar pmml-statsmodels-example/target/pmml-statsmodels-example-executable-1.3-SNAPSHOT.jar --help
 ```
 
 # Documentation #
