@@ -24,11 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import com.google.common.base.Equivalence;
 import com.google.common.collect.Iterables;
 import org.jpmml.evaluator.ResultField;
+import org.jpmml.evaluator.Table;
+import org.jpmml.evaluator.TableCollector;
 import org.jpmml.evaluator.testing.Batch;
 import org.jpmml.evaluator.testing.BatchUtil;
 import org.jpmml.evaluator.testing.Conflict;
@@ -39,10 +40,10 @@ public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
 
 	@Override
 	public void evaluate(Batch batch) throws Exception {
-		Function<Map<String, ?>, List<Map<String, ?>>> function = new Function<Map<String, ?>, List<Map<String, ?>>>(){
+		Function<Map<String, ?>, Table> function = new Function<Map<String, ?>, Table>(){
 
 			@Override
-			public List<Map<String, ?>> apply(Map<String, ?> map){
+			public Table apply(Map<String, ?> map){
 				Map.Entry<String, ?> entry = Iterables.getOnlyElement(map.entrySet());
 
 				String name = entry.getKey();
@@ -52,7 +53,7 @@ public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
 
 				return values.stream()
 					.map(value -> Collections.singletonMap(name, value))
-					.collect(Collectors.toList());
+					.collect(new TableCollector());
 			}
 		};
 
@@ -71,12 +72,15 @@ public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
 			}
 
 			@Override
-			public List<? extends Map<String, ?>> getInput() throws IOException {
+			public Table getInput() throws IOException {
 				String algorithm = getAlgorithm();
 
 				// XXX
 				if("SSM".equals(algorithm)){
-					return Collections.singletonList(Collections.singletonMap("horizon", 12));
+					List<Map<String, ?>> rows = Collections.singletonList(Collections.singletonMap("horizon", 12));
+
+					return rows.stream()
+						.collect(new TableCollector());
 				}
 
 				return super.getInput();
