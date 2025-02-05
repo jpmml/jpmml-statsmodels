@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import com.beust.jcommander.DefaultUsageFormatter;
+import com.beust.jcommander.IUsageFormatter;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -40,25 +42,28 @@ import statsmodels.ResultsWrapper;
 public class Main {
 
 	@Parameter (
-		names = "--help",
-		description = "Show the list of configuration options and exit",
-		help = true
-	)
-	private boolean help = false;
-
-	@Parameter (
 		names = {"--pkl-input"},
 		description = "Pickle input file",
-		required = true
+		required = true,
+		order = 1
 	)
 	private File input = null;
 
 	@Parameter (
 		names = "--pmml-output",
 		description = "PMML output file",
-		required = true
+		required = true,
+		order = 2
 	)
 	private File output = null;
+
+	@Parameter (
+		names = "--help",
+		description = "Show the list of configuration options and exit",
+		help = true,
+		order = Integer.MAX_VALUE
+	)
+	private boolean help = false;
 
 
 	static
@@ -68,6 +73,8 @@ public class Main {
 		JCommander commander = new JCommander(main);
 		commander.setProgramName(Main.class.getName());
 
+		IUsageFormatter usageFormatter = new DefaultUsageFormatter(commander);
+
 		try {
 			commander.parse(args);
 		} catch(ParameterException pe){
@@ -76,7 +83,7 @@ public class Main {
 			sb.append(pe.toString());
 			sb.append("\n");
 
-			commander.usage(sb);
+			usageFormatter.usage(sb);
 
 			System.err.println(sb.toString());
 
@@ -86,7 +93,7 @@ public class Main {
 		if(main.help){
 			StringBuilder sb = new StringBuilder();
 
-			commander.usage(sb);
+			usageFormatter.usage(sb);
 
 			System.out.println(sb.toString());
 
