@@ -34,7 +34,7 @@ import org.jpmml.evaluator.testing.Batch;
 import org.jpmml.evaluator.testing.BatchUtil;
 import org.jpmml.evaluator.testing.Conflict;
 import org.jpmml.evaluator.time_series.SeriesForecast;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
 

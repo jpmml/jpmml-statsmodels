@@ -19,7 +19,7 @@
 package org.jpmml.statsmodels.testing;
 
 import org.jpmml.converter.testing.Datasets;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RegressionTest extends StatsModelsEncoderBatchTest implements Datasets {
 

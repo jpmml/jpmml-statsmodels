@@ -21,7 +21,7 @@ package org.jpmml.statsmodels.testing;
 import org.jpmml.converter.testing.Datasets;
 import org.jpmml.converter.testing.Fields;
 import org.jpmml.evaluator.testing.PMMLEquivalence;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ClassificationTest extends StatsModelsEncoderBatchTest implements Datasets, Fields {
 
