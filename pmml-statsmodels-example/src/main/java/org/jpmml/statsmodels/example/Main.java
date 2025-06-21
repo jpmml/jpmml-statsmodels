@@ -31,7 +31,8 @@ import org.dmg.pmml.PMML;
 import org.jpmml.model.JAXBSerializer;
 import org.jpmml.model.metro.MetroJAXBSerializer;
 import org.jpmml.python.ClassDictUtil;
-import org.jpmml.python.PickleUtil;
+import org.jpmml.python.JoblibUnpickler;
+import org.jpmml.python.PythonUnpickler;
 import org.jpmml.python.Storage;
 import org.jpmml.python.StorageUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
@@ -111,8 +112,10 @@ public class Main {
 		try(Storage storage = StorageUtil.createStorage(this.input)){
 			logger.info("Parsing PKL..");
 
+			PythonUnpickler pythonUnpickler = new JoblibUnpickler();
+
 			long begin = System.currentTimeMillis();
-			object = PickleUtil.unpickle(storage);
+			object = pythonUnpickler.load(storage);
 			long end = System.currentTimeMillis();
 
 			logger.info("Parsed PKL in {} ms.", (end - begin));
