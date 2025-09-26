@@ -103,6 +103,7 @@
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
