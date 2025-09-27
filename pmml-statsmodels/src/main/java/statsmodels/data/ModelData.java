@@ -37,7 +37,17 @@ public class ModelData extends PythonObject {
 	public List<String> getEndogNames(){
 		Series origEndog = getOrigEndog();
 
-		return Collections.singletonList(origEndog.getName());
+		String name;
+
+		if(origEndog.hasattr("_name")){
+			name = origEndog.getString("_name");
+		} else
+
+		{
+			name = origEndog.getName();
+		}
+
+		return Collections.singletonList(name);
 	}
 
 	public List<String> getExogNames(){
