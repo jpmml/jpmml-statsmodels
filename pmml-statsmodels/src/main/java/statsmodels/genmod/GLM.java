@@ -44,23 +44,23 @@ public class GLM extends RegressionModel {
 	}
 
 	@Override
-	public Label encodeLabel(List<String> yNames, StatsModelsEncoder encoder){
+	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
 		Family family = getFamily();
 
-		String yName = Iterables.getOnlyElement(yNames);
+		String endogName = Iterables.getOnlyElement(endogNames);
 
 		String familyName = family.getPythonName();
 		switch(familyName){
 			case "Binomial":
 				{
-					DataField dataField = encoder.createDataField(yName, OpType.CATEGORICAL, DataType.INTEGER, Arrays.asList(0, 1));
+					DataField dataField = encoder.createDataField(endogName, OpType.CATEGORICAL, DataType.INTEGER, Arrays.asList(0, 1));
 
 					return new CategoricalLabel(dataField);
 				}
 			case "Gaussian":
 			case "Poisson":
 				{
-					DataField dataField = encoder.createDataField(yName, OpType.CONTINUOUS, DataType.DOUBLE);
+					DataField dataField = encoder.createDataField(endogName, OpType.CONTINUOUS, DataType.DOUBLE);
 
 					return new ContinuousLabel(dataField);
 				}

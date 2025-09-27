@@ -37,10 +37,10 @@ public class BinaryModel extends DiscreteModel {
 	}
 
 	@Override
-	public Label encodeLabel(List<String> yNames, StatsModelsEncoder encoder){
-		String yName = Iterables.getOnlyElement(yNames);
+	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
+		String endogName = Iterables.getOnlyElement(endogNames);
 
-		DataField dataField = encoder.createDataField(yName, OpType.CATEGORICAL, DataType.INTEGER, Arrays.asList(0, 1));
+		DataField dataField = encoder.createDataField(endogName, OpType.CATEGORICAL, DataType.INTEGER, Arrays.asList(0, 1));
 
 		return new CategoricalLabel(dataField);
 	}

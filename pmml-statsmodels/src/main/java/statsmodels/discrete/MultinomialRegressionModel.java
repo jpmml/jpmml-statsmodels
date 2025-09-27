@@ -40,10 +40,10 @@ public class MultinomialRegressionModel extends CrossSectionalModel {
 	}
 
 	@Override
-	public Label encodeLabel(List<String> yNames, StatsModelsEncoder encoder){
+	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
 		Map<Integer, ?> yNamesMap = getYNamesMap();
 
-		String yName = Iterables.getOnlyElement(yNames);
+		String endogName = Iterables.getOnlyElement(endogNames);
 
 		List<Object> categories = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class MultinomialRegressionModel extends CrossSectionalModel {
 
 		DataType dataType = TypeUtil.getDataType(categories, DataType.STRING);
 
-		DataField dataField = encoder.createDataField(yName, OpType.CATEGORICAL, dataType, categories);
+		DataField dataField = encoder.createDataField(endogName, OpType.CATEGORICAL, dataType, categories);
 
 		return new CategoricalLabel(dataField);
 	}
