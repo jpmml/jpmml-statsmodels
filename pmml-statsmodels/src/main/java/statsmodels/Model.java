@@ -18,6 +18,10 @@
  */
 package statsmodels;
 
+import java.util.List;
+
+import org.jpmml.converter.Feature;
+import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
@@ -31,10 +35,37 @@ public class Model extends PythonObject {
 	}
 
 	abstract
-	public Schema encodeSchema(StatsModelsEncoder encoder);
+	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder);
+
+	abstract
+	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder);
 
 	abstract
 	public org.dmg.pmml.Model encodeModel(Results results, Schema schema);
+
+	public Schema encodeSchema(StatsModelsEncoder encoder){
+		ModelData data = getData();
+
+		List<String> endogNames;
+		List<String> exogNames;
+
+		ModelData.Cache cache = data.getCache();
+		if(cache.hasNames()){
+			endogNames = cache.getYNames();
+			exogNames = cache.getXNames();
+		} else
+
+		{
+			endogNames = data.getEndogNames();
+			exogNames = data.getExogNames();
+		}
+
+		Label label = encodeLabel(endogNames, encoder);
+
+		List<Feature> features = encodeFeatures(exogNames, encoder);
+
+		return new Schema(encoder, label, features);
+	}
 
 	public ModelData getData(){
 		return get("data", ModelData.class);

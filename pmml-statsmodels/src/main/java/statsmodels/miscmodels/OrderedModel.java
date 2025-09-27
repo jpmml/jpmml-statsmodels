@@ -52,6 +52,26 @@ public class OrderedModel extends CrossSectionalModel {
 	}
 
 	@Override
+	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
+		List<Integer> labels = ValueUtil.asIntegers(getLabels());
+
+		String endogName = Iterables.getOnlyElement(endogNames);
+
+		DataField dataField = encoder.createDataField(endogName, OpType.ORDINAL, DataType.INTEGER, labels);
+
+		return new OrdinalLabel(dataField);
+	}
+
+	@Override
+	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
+		Integer kLevels = getKLevels();
+
+		exogNames = exogNames.subList(0, exogNames.size() - (kLevels - 1));
+
+		return super.encodeFeatures(exogNames, encoder);
+	}
+
+	@Override
 	public org.dmg.pmml.Model encodeModel(List<? extends Number> params, Schema schema){
 		RVContinuous distr = getDistr();
 		Integer kExtra = getKExtra();
@@ -99,26 +119,6 @@ public class OrderedModel extends CrossSectionalModel {
 		RegressionModel secondRegressionModel = RegressionModelUtil.createOrdinalClassification(feature, thresholds, parseNormalizationMethod(distr), true, schema);
 
 		return MiningModelUtil.createModelChain(Arrays.asList(firstRegressionModel, secondRegressionModel), Segmentation.MissingPredictionTreatment.RETURN_MISSING);
-	}
-
-	@Override
-	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
-		List<Integer> labels = ValueUtil.asIntegers(getLabels());
-
-		String endogName = Iterables.getOnlyElement(endogNames);
-
-		DataField dataField = encoder.createDataField(endogName, OpType.ORDINAL, DataType.INTEGER, labels);
-
-		return new OrdinalLabel(dataField);
-	}
-
-	@Override
-	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
-		Integer kLevels = getKLevels();
-
-		exogNames = exogNames.subList(0, exogNames.size() - (kLevels - 1));
-
-		return super.encodeFeatures(exogNames, encoder);
 	}
 
 	public RVContinuous getDistr(){

@@ -37,7 +37,6 @@ import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
 import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
-import statsmodels.data.ModelData;
 
 abstract
 public class CrossSectionalModel extends Model {
@@ -50,37 +49,6 @@ public class CrossSectionalModel extends Model {
 	public org.dmg.pmml.Model encodeModel(List<? extends Number> params, Schema schema);
 
 	@Override
-	public Schema encodeSchema(StatsModelsEncoder encoder){
-		ModelData data = getData();
-
-		List<String> endogNames;
-		List<String> exogNames;
-
-		ModelData.Cache cache = data.getCache();
-		if(cache.hasNames()){
-			endogNames = cache.getYNames();
-			exogNames = cache.getXNames();
-		} else
-
-		{
-			endogNames = data.getEndogNames();
-			exogNames = data.getExogNames();
-		}
-
-		Label label = encodeLabel(endogNames, encoder);
-
-		List<Feature> features = encodeFeatures(exogNames, encoder);
-
-		return new Schema(encoder, label, features);
-	}
-
-	@Override
-	public org.dmg.pmml.Model encodeModel(Results results, Schema schema){
-		List<Number> params = results.getParams();
-
-		return encodeModel(params, schema);
-	}
-
 	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
 		String endogName = Iterables.getOnlyElement(endogNames);
 
@@ -89,6 +57,7 @@ public class CrossSectionalModel extends Model {
 		return new ContinuousLabel(dataField);
 	}
 
+	@Override
 	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
 		Integer kConstant = getKConstant();
 
@@ -162,6 +131,13 @@ public class CrossSectionalModel extends Model {
 		}
 
 		return features;
+	}
+
+	@Override
+	public org.dmg.pmml.Model encodeModel(Results results, Schema schema){
+		List<Number> params = results.getParams();
+
+		return encodeModel(params, schema);
 	}
 
 	static

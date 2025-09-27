@@ -29,10 +29,8 @@ import org.dmg.pmml.OpType;
 import org.jpmml.converter.ContinuousLabel;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
-import org.jpmml.converter.Schema;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import statsmodels.Model;
-import statsmodels.data.ModelData;
 
 abstract
 public class TimeSeriesModel extends Model {
@@ -42,30 +40,6 @@ public class TimeSeriesModel extends Model {
 	}
 
 	@Override
-	public Schema encodeSchema(StatsModelsEncoder encoder){
-		ModelData data = getData();
-
-		List<String> endogNames;
-		List<String> exogNames;
-
-		ModelData.Cache cache = data.getCache();
-		if(cache.hasNames()){
-			endogNames = cache.getYNames();
-			exogNames = cache.getXNames();
-		} else
-
-		{
-			endogNames = data.getEndogNames();
-			exogNames = data.getExogNames();
-		}
-
-		Label label = encodeLabel(endogNames, encoder);
-
-		List<Feature> features = encodeFeatures(exogNames, encoder);
-
-		return new Schema(encoder, label, features);
-	}
-
 	public Label encodeLabel(List<String> endogNames, StatsModelsEncoder encoder){
 		String endogName = Iterables.getOnlyElement(endogNames);
 
@@ -74,6 +48,7 @@ public class TimeSeriesModel extends Model {
 		return new ContinuousLabel(dataField);
 	}
 
+	@Override
 	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
 		Integer kConstant = getKConstant();
 
