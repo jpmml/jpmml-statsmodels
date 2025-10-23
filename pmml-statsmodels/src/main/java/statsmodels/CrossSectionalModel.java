@@ -154,7 +154,7 @@ public class CrossSectionalModel extends Model {
 		} else
 
 		{
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Expected intercept feature, got " + feature);
 		}
 	}
 
