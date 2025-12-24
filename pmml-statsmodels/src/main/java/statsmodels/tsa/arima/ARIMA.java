@@ -68,7 +68,7 @@ public class ARIMA extends TimeSeriesModel {
 		HasArray obsIntercept = smootherResults.getObsIntercept();
 		HasArray transition = smootherResults.getTransition();
 
-		MiningSchema miningSchema = ModelUtil.createMiningSchema(schema.getLabel())
+		MiningSchema miningSchema = ModelUtil.createMiningSchema(schema)
 			.addMiningFields(ModelUtil.createMiningField("horizon", UsageType.SUPPLEMENTARY));
 
 		StateVector stateVector = new StateVector(createRealArray(predictedState, -1));

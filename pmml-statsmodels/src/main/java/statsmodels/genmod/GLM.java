@@ -32,6 +32,7 @@ import org.jpmml.converter.ContinuousLabel;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelUtil;
+import org.jpmml.converter.ScalarLabel;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.general_regression.GeneralRegressionModelUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
@@ -75,7 +76,7 @@ public class GLM extends RegressionModel {
 
 		Link link = family.getLink();
 
-		Label label = schema.getLabel();
+		ScalarLabel scalarLabel = schema.requireScalarLabel();
 		List<? extends Feature> features = schema.getFeatures();
 
 		Object targetCategory;
@@ -84,7 +85,7 @@ public class GLM extends RegressionModel {
 		switch(familyName){
 			case "Binomial":
 				{
-					CategoricalLabel categoricalLabel = (CategoricalLabel)label;
+					CategoricalLabel categoricalLabel = (CategoricalLabel)scalarLabel;
 
 					targetCategory = categoricalLabel.getValue(1);
 				}
@@ -92,7 +93,7 @@ public class GLM extends RegressionModel {
 			case "Gaussian":
 			case "Poisson":
 				{
-					ContinuousLabel continuousLabel = (ContinuousLabel)label;
+					ContinuousLabel continuousLabel = (ContinuousLabel)scalarLabel;
 
 					targetCategory = null;
 				}
@@ -101,7 +102,7 @@ public class GLM extends RegressionModel {
 				throw new IllegalArgumentException(familyName);
 		}
 
-		GeneralRegressionModel generalRegressionModel = new GeneralRegressionModel(GeneralRegressionModel.ModelType.GENERALIZED_LINEAR, (targetCategory != null ? MiningFunction.CLASSIFICATION : MiningFunction.REGRESSION), ModelUtil.createMiningSchema(label), null, null, null)
+		GeneralRegressionModel generalRegressionModel = new GeneralRegressionModel(GeneralRegressionModel.ModelType.GENERALIZED_LINEAR, (targetCategory != null ? MiningFunction.CLASSIFICATION : MiningFunction.REGRESSION), ModelUtil.createMiningSchema(scalarLabel), null, null, null)
 				.setDistribution(parseDistribution(family))
 				.setLinkFunction(parseLinkFunction(link))
 				.setLinkParameter(parseLinkParameter(link));
@@ -111,7 +112,7 @@ public class GLM extends RegressionModel {
 		switch(familyName){
 			case "Binomial":
 				{
-					CategoricalLabel categoricalLabel = (CategoricalLabel)label;
+					CategoricalLabel categoricalLabel = (CategoricalLabel)scalarLabel;
 
 					generalRegressionModel.setOutput(ModelUtil.createProbabilityOutput(DataType.DOUBLE, categoricalLabel));
 				}

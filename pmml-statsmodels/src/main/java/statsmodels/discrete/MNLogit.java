@@ -27,7 +27,6 @@ import org.dmg.pmml.regression.RegressionTable;
 import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.FortranMatrixUtil;
-import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
@@ -44,10 +43,8 @@ public class MNLogit extends MultinomialRegressionModel {
 		Integer k = getK();
 		Integer kConstant = getKConstant();
 
-		Label label = schema.getLabel();
+		CategoricalLabel categoricalLabel = schema.requireCategoricalLabel();
 		List<? extends Feature> features = schema.getFeatures();
-
-		CategoricalLabel categoricalLabel = (CategoricalLabel)label;
 
 		List<RegressionTable> regressionTables = new ArrayList<>();
 
