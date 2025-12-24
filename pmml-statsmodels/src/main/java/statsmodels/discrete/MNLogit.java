@@ -80,16 +80,8 @@ public class MNLogit extends MultinomialRegressionModel {
 			List<? extends Number> coefficients = new ArrayList<>(FortranMatrixUtil.getRow(params, rows, columns, i));
 			Number intercept = null;
 
-			if(kConstant == 0){
-				// Ignored
-			} else
-
 			if(kConstant == 1){
 				intercept = coefficients.remove(kIndex);
-			} else
-
-			{
-				throw new IllegalArgumentException();
 			}
 
 			RegressionTable regressionTable = RegressionModelUtil.createRegressionTable(features, coefficients, intercept)
