@@ -37,6 +37,7 @@ import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
 import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import org.jpmml.statsmodels.StatsModelsException;
 
 abstract
 public class CrossSectionalModel extends Model {
@@ -77,7 +78,7 @@ public class CrossSectionalModel extends Model {
 		} else
 
 		{
-			throw new IllegalArgumentException();
+			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
 		}
 
 		boolean isFormula = false;

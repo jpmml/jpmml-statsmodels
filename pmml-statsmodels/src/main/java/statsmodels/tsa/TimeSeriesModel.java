@@ -21,6 +21,7 @@ package statsmodels.tsa;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Iterables;
 import org.dmg.pmml.DataField;
@@ -30,6 +31,7 @@ import org.jpmml.converter.ContinuousLabel;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import org.jpmml.statsmodels.StatsModelsException;
 import statsmodels.Model;
 
 abstract
@@ -59,14 +61,21 @@ public class TimeSeriesModel extends Model {
 		if(kConstant == 1){
 
 			if(!Objects.equals(Collections.singletonList("const"), exogNames)){
-				throw new IllegalArgumentException();
+				throw new StatsModelsException("Variable \'const\' not found in " + formatNames(exogNames));
 			}
 		} else
 
 		{
-			throw new IllegalArgumentException();
+			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
 		}
 
 		return Collections.emptyList();
+	}
+
+	static
+	private List<String> formatNames(List<String> names){
+		return names.stream()
+			.map(name -> "\'" + name + "\'")
+			.collect(Collectors.toList());
 	}
 }

@@ -36,6 +36,7 @@ import org.jpmml.converter.ScalarLabel;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.general_regression.GeneralRegressionModelUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import org.jpmml.statsmodels.StatsModelsException;
 import statsmodels.regression.RegressionModel;
 
 public class GLM extends RegressionModel {
@@ -66,7 +67,7 @@ public class GLM extends RegressionModel {
 					return new ContinuousLabel(dataField);
 				}
 			default:
-				throw new IllegalArgumentException(familyName);
+				throw new IllegalArgumentException();
 		}
 	}
 
@@ -99,7 +100,7 @@ public class GLM extends RegressionModel {
 				}
 				break;
 			default:
-				throw new IllegalArgumentException(familyName);
+				throw new IllegalArgumentException();
 		}
 
 		GeneralRegressionModel generalRegressionModel = new GeneralRegressionModel(GeneralRegressionModel.ModelType.GENERALIZED_LINEAR, (targetCategory != null ? MiningFunction.CLASSIFICATION : MiningFunction.REGRESSION), ModelUtil.createMiningSchema(scalarLabel), null, null, null)
@@ -140,7 +141,7 @@ public class GLM extends RegressionModel {
 			case "Poisson":
 				return GeneralRegressionModel.Distribution.POISSON;
 			default:
-				throw new IllegalArgumentException(familyName);
+				throw new StatsModelsException("Distribution family \'" + familyName + "\' is not supported");
 		}
 	}
 
@@ -159,7 +160,7 @@ public class GLM extends RegressionModel {
 			case "Logit":
 				return GeneralRegressionModel.LinkFunction.LOGIT;
 			default:
-				throw new IllegalArgumentException(linkName);
+				throw new StatsModelsException("Link function \'" + linkName + "\' is not supported");
 		}
 	}
 
@@ -176,7 +177,7 @@ public class GLM extends RegressionModel {
 			case "Logit":
 				return null;
 			default:
-				throw new IllegalArgumentException(linkName);
+				throw new StatsModelsException("Link function \'" + linkName + "\' is not supported");
 		}
 	}
 }

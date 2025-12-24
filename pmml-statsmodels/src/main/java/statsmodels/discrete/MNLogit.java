@@ -30,6 +30,7 @@ import org.jpmml.converter.FortranMatrixUtil;
 import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
+import org.jpmml.statsmodels.StatsModelsException;
 
 public class MNLogit extends MultinomialRegressionModel {
 
@@ -71,7 +72,7 @@ public class MNLogit extends MultinomialRegressionModel {
 		} else
 
 		{
-			throw new IllegalArgumentException();
+			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
 		}
 
 		// Rows one up from the base case

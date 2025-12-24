@@ -25,6 +25,7 @@ import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelEncoder;
 import org.jpmml.converter.Schema;
+import org.jpmml.statsmodels.StatsModelsException;
 import statsmodels.CrossSectionalModel;
 
 abstract
@@ -64,7 +65,7 @@ public class RegressionModel extends CrossSectionalModel {
 		} else
 
 		{
-			throw new IllegalArgumentException();
+			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
 		}
 
 		return encodeModel(coefficients, intercept, schema);

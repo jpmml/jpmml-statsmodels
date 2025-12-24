@@ -41,6 +41,7 @@ import org.jpmml.converter.ValueUtil;
 import org.jpmml.converter.mining.MiningModelUtil;
 import org.jpmml.converter.regression.RegressionModelUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import org.jpmml.statsmodels.StatsModelsException;
 import scipy.stats.RVContinuous;
 import statsmodels.CrossSectionalModel;
 
@@ -78,7 +79,7 @@ public class OrderedModel extends CrossSectionalModel {
 		Number offset = getOffset();
 
 		if(kExtra != (kLevels - 1)){
-			throw new IllegalArgumentException();
+			throw new StatsModelsException("Expected " + (kLevels - 1) + " threshold values, got " + kExtra);
 		}
 
 		ModelEncoder encoder = schema.getEncoder();
@@ -149,7 +150,7 @@ public class OrderedModel extends CrossSectionalModel {
 			case "norm":
 				return RegressionModel.NormalizationMethod.PROBIT;
 			default:
-				throw new IllegalArgumentException(name);
+				throw new StatsModelsException("Distribution family \'" + name + "\' is not supported");
 		}
 	}
 }
