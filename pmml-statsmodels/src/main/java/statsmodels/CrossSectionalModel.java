@@ -35,6 +35,7 @@ import org.jpmml.converter.Feature;
 import org.jpmml.converter.FieldUtil;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
+import org.jpmml.converter.SchemaException;
 import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import org.jpmml.statsmodels.StatsModelsException;
@@ -155,7 +156,7 @@ public class CrossSectionalModel extends Model {
 		} else
 
 		{
-			throw new IllegalArgumentException("Expected intercept feature, got " + feature);
+			throw new SchemaException("Expected intercept feature, got " + feature);
 		}
 	}
 
