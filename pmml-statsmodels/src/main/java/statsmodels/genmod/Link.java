@@ -27,6 +27,6 @@ public class Link extends PythonObject {
 	}
 
 	public Number getPower(){
-		return (Number)getOptionalScalar("power");
+		return getOptionalNumber("power");
 	}
 }

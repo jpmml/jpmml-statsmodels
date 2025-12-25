@@ -134,7 +134,7 @@ public class OrderedModel extends CrossSectionalModel {
 	}
 
 	public Number getOffset(){
-		return (Number)getOptionalScalar("offset");
+		return getOptionalNumber("offset");
 	}
 
 	static
