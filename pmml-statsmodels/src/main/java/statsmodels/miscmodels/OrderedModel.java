@@ -31,6 +31,7 @@ import org.dmg.pmml.OutputField;
 import org.dmg.pmml.mining.Segmentation;
 import org.dmg.pmml.regression.RegressionModel;
 import org.jpmml.converter.ContinuousFeature;
+import org.jpmml.converter.ExceptionUtil;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelEncoder;
@@ -79,7 +80,7 @@ public class OrderedModel extends CrossSectionalModel {
 		Number offset = getOffset();
 
 		if(kExtra != (kLevels - 1)){
-			throw new StatsModelsException("Expected " + (kLevels - 1) + " threshold values, got " + kExtra);
+			throw new StatsModelsException("Expected " + ExceptionUtil.formatCount(kLevels - 1, "threshold value") + ", got " + kExtra);
 		}
 
 		ModelEncoder encoder = schema.getEncoder();
@@ -150,7 +151,7 @@ public class OrderedModel extends CrossSectionalModel {
 			case "norm":
 				return RegressionModel.NormalizationMethod.PROBIT;
 			default:
-				throw new StatsModelsException("Distribution family \'" + name + "\' is not supported");
+				throw new StatsModelsException("Distribution family " + ExceptionUtil.formatParameter(name) + " is not supported");
 		}
 	}
 }

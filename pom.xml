@@ -49,7 +49,7 @@
 	</issueManagement>
 
 	<properties>
-		<jpmml-python.version>1.3.14</jpmml-python.version>
+		<jpmml-python.version>1.3.16</jpmml-python.version>
 		<jpmml-evaluator.version>1.7.6</jpmml-evaluator.version>
 		<project.build.outputTimestamp>2025-12-30T10:36:38Z</project.build.outputTimestamp>
 	</properties>

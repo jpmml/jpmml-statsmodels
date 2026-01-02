@@ -29,6 +29,7 @@ import org.dmg.pmml.OpType;
 import org.dmg.pmml.general_regression.GeneralRegressionModel;
 import org.jpmml.converter.CategoricalLabel;
 import org.jpmml.converter.ContinuousLabel;
+import org.jpmml.converter.ExceptionUtil;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelUtil;
@@ -141,7 +142,7 @@ public class GLM extends RegressionModel {
 			case "Poisson":
 				return GeneralRegressionModel.Distribution.POISSON;
 			default:
-				throw new StatsModelsException("Distribution family \'" + familyName + "\' is not supported");
+				throw new StatsModelsException("Distribution family " + ExceptionUtil.formatParameter(familyName) + " is not supported");
 		}
 	}
 
@@ -160,7 +161,7 @@ public class GLM extends RegressionModel {
 			case "Logit":
 				return GeneralRegressionModel.LinkFunction.LOGIT;
 			default:
-				throw new StatsModelsException("Link function \'" + linkName + "\' is not supported");
+				throw new StatsModelsException("Link function " + ExceptionUtil.formatParameter(linkName) + " is not supported");
 		}
 	}
 
@@ -177,7 +178,7 @@ public class GLM extends RegressionModel {
 			case "Logit":
 				return null;
 			default:
-				throw new StatsModelsException("Link function \'" + linkName + "\' is not supported");
+				throw new StatsModelsException("Link function " + ExceptionUtil.formatParameter(linkName) + " is not supported");
 		}
 	}
 }
