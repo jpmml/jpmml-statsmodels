@@ -36,6 +36,7 @@ import org.jpmml.python.PythonUnpickler;
 import org.jpmml.python.Storage;
 import org.jpmml.python.StorageUtil;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import org.jpmml.statsmodels.StatsModelsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import statsmodels.ResultsWrapper;
@@ -126,7 +127,7 @@ public class Main {
 		}
 
 		if(!(object instanceof ResultsWrapper)){
-			throw new IllegalArgumentException("The object (" + ClassDictUtil.formatClass(object) + ") is not a ResultsWrapper");
+			throw new StatsModelsException("The object (" + ClassDictUtil.formatClass(object) + ") is not a ResultsWrapper");
 		}
 
 		ResultsWrapper resultsWrapper = (ResultsWrapper)object;

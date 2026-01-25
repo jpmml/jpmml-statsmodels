@@ -68,7 +68,7 @@ public class GLM extends RegressionModel {
 					return new ContinuousLabel(dataField);
 				}
 			default:
-				throw new IllegalArgumentException();
+				throw new StatsModelsException("Distribution family " + ExceptionUtil.formatParameter(familyName) + " is not supported");
 		}
 	}
 
@@ -101,7 +101,7 @@ public class GLM extends RegressionModel {
 				}
 				break;
 			default:
-				throw new IllegalArgumentException();
+				throw new StatsModelsException("Distribution family " + ExceptionUtil.formatParameter(familyName) + " is not supported");
 		}
 
 		GeneralRegressionModel generalRegressionModel = new GeneralRegressionModel(GeneralRegressionModel.ModelType.GENERALIZED_LINEAR, (targetCategory != null ? MiningFunction.CLASSIFICATION : MiningFunction.REGRESSION), ModelUtil.createMiningSchema(scalarLabel), null, null, null)
