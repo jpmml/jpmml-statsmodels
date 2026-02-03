@@ -8,9 +8,7 @@
 		<version>1.3-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.jpmml</groupId>
 	<artifactId>pmml-statsmodels-example</artifactId>
-	<packaging>jar</packaging>
 
 	<name>JPMML StatsModels converter example applications</name>
 	<description>JPMML StatsModels to PMML converter example command-line applications</description>
