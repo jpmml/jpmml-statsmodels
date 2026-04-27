@@ -19,7 +19,6 @@
 package statsmodels;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -112,7 +111,7 @@ public class CrossSectionalModel extends Model {
 					} // End if
 
 					if(!isFormula){
-						FieldUtil.addValues(dataField, Collections.singletonList(value));
+						FieldUtil.addValue(dataField, value);
 					}
 
 					features.add(new BinaryFeature(encoder, dataField, value));
