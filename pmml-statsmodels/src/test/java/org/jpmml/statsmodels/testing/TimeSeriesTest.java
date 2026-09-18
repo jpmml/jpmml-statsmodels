@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -76,7 +77,7 @@ public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
 				String algorithm = getAlgorithm();
 
 				// XXX
-				if("SSM".equals(algorithm)){
+				if(Objects.equals("SSM", algorithm)){
 					List<Map<String, ?>> rows = Collections.singletonList(Collections.singletonMap("horizon", 12));
 
 					return rows.stream()
