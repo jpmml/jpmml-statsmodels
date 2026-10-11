@@ -30,6 +30,7 @@ import org.dmg.pmml.OpType;
 import org.jpmml.converter.BinaryFeature;
 import org.jpmml.converter.ContinuousFeature;
 import org.jpmml.converter.ContinuousLabel;
+import org.jpmml.converter.ExceptionUtil;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.FieldUtil;
 import org.jpmml.converter.Label;
@@ -155,7 +156,7 @@ public class CrossSectionalModel extends Model {
 		} else
 
 		{
-			throw new UnsupportedFeatureException("Expected intercept feature, got " + feature.typeString());
+			throw new UnsupportedFeatureException("Expected intercept feature, got " + ExceptionUtil.formatFeature(feature));
 		}
 	}
 
