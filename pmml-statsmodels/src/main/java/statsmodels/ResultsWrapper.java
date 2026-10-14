@@ -18,16 +18,26 @@
  */
 package statsmodels;
 
+import java.util.Map;
+
 import org.dmg.pmml.Model;
 import org.dmg.pmml.PMML;
+import org.jpmml.converter.PMMLEncodable;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 
-public class ResultsWrapper extends PythonObject {
+public class ResultsWrapper extends PythonObject implements PMMLEncodable {
 
 	public ResultsWrapper(String module, String name){
 		super(module, name);
+	}
+
+	@Override
+	public PMML encodePMML(Map<String, ?> options){
+		StatsModelsEncoder encoder = new StatsModelsEncoder();
+
+		return encodePMML(encoder);
 	}
 
 	public PMML encodePMML(StatsModelsEncoder encoder){
