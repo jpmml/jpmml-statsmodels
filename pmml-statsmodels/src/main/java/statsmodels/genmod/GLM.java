@@ -105,9 +105,9 @@ public class GLM extends RegressionModel {
 		}
 
 		GeneralRegressionModel generalRegressionModel = new GeneralRegressionModel(GeneralRegressionModel.ModelType.GENERALIZED_LINEAR, (targetCategory != null ? MiningFunction.CLASSIFICATION : MiningFunction.REGRESSION), ModelUtil.createMiningSchema(scalarLabel), null, null, null)
-				.setDistribution(parseDistribution(family))
-				.setLinkFunction(parseLinkFunction(link))
-				.setLinkParameter(parseLinkParameter(link));
+			.setLinkFunction(parseLinkFunction(link))
+			.setLinkParameter(parseLinkParameter(link))
+			.setDistribution(parseDistribution(family));
 
 		GeneralRegressionModelUtil.encodeRegressionTable(generalRegressionModel, features, coefficients, intercept, targetCategory);
 

@@ -82,8 +82,8 @@ public class ARIMA extends TimeSeriesModel {
 
 		StateSpaceModel stateSpaceModel = new StateSpaceModel()
 			.setStateVector(stateVector)
-			.setMeasurementMatrix(measurementMatrix)
 			.setTransitionMatrix(transitionMatrix)
+			.setMeasurementMatrix(measurementMatrix)
 			.setInterceptVector(interceptVector);
 
 		org.dmg.pmml.time_series.TimeSeriesModel timeSeriesModel = new org.dmg.pmml.time_series.TimeSeriesModel(MiningFunction.TIME_SERIES, org.dmg.pmml.time_series.TimeSeriesModel.Algorithm.STATE_SPACE_MODEL, miningSchema)
