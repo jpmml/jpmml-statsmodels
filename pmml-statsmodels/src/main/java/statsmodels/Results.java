@@ -36,9 +36,7 @@ public class Results extends PythonObject {
 
 		Schema schema = model.encodeSchema(encoder);
 
-		org.dmg.pmml.Model pmmlModel = model.encodeModel(this, schema);
-
-		ensureAlgorithmName(pmmlModel, model.getClassName());
+		org.dmg.pmml.Model pmmlModel = encodeModel(schema);
 
 		return encoder.encodePMML(pmmlModel);
 	}
