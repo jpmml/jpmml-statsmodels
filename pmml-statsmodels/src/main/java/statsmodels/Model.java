@@ -25,6 +25,7 @@ import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
+import org.jpmml.statsmodels.StatsModelsException;
 import statsmodels.data.ModelData;
 
 abstract
@@ -65,6 +66,22 @@ public class Model extends PythonObject {
 		List<Feature> features = encodeFeatures(exogNames, encoder);
 
 		return new Schema(encoder, label, features);
+	}
+
+	public boolean hasIntercept(){
+		Integer kConstant = getKConstant();
+
+		if(kConstant == 0){
+			return false;
+		} else
+
+		if(kConstant == 1){
+			return true;
+		} else
+
+		{
+			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
+		}
 	}
 
 	public ModelData getData(){

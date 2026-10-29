@@ -30,7 +30,6 @@ import org.jpmml.converter.FortranMatrixUtil;
 import org.jpmml.converter.ModelUtil;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
-import org.jpmml.statsmodels.StatsModelsException;
 
 public class MNLogit extends MultinomialRegressionModel {
 
@@ -42,7 +41,7 @@ public class MNLogit extends MultinomialRegressionModel {
 	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> params, Schema schema){
 		Integer j = getJ();
 		Integer k = getK();
-		Integer kConstant = getKConstant();
+		boolean hasIntercept = hasIntercept();
 
 		CategoricalLabel categoricalLabel = schema.requireCategoricalLabel();
 		List<? extends Feature> features = schema.getFeatures();
@@ -63,16 +62,8 @@ public class MNLogit extends MultinomialRegressionModel {
 		// XXX
 		int kIndex = 0;
 
-		if(kConstant == 0){
-			// Ignored
-		} else
-
-		if(kConstant == 1){
+		if(hasIntercept){
 			features = dropInterceptFeature(features, kIndex);
-		} else
-
-		{
-			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
 		}
 
 		// Rows one up from the base case
@@ -80,7 +71,7 @@ public class MNLogit extends MultinomialRegressionModel {
 			List<? extends Number> coefficients = new ArrayList<>(FortranMatrixUtil.getRow(params, rows, columns, i));
 			Number intercept = null;
 
-			if(kConstant == 1){
+			if(hasIntercept){
 				intercept = coefficients.remove(kIndex);
 			}
 

@@ -38,7 +38,6 @@ import org.jpmml.converter.Schema;
 import org.jpmml.converter.UnsupportedFeatureException;
 import org.jpmml.statsmodels.InterceptFeature;
 import org.jpmml.statsmodels.StatsModelsEncoder;
-import org.jpmml.statsmodels.StatsModelsException;
 
 abstract
 public class CrossSectionalModel extends Model {
@@ -61,33 +60,19 @@ public class CrossSectionalModel extends Model {
 
 	@Override
 	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
-		Integer kConstant = getKConstant();
+		boolean hasIntercept = hasIntercept();
 
 		List<Feature> features = new ArrayList<>();
 
 		Matcher interceptMatcher = CrossSectionalModel.TERM_INTERCEPT.matcher("");
 		Matcher binaryIndicatorMatcher = CrossSectionalModel.TERM_BINARY_INDICATOR.matcher("");
 
-		boolean expectIntercept;
-
-		if(kConstant == 0){
-			expectIntercept = false;
-		} else
-
-		if(kConstant == 1){
-			expectIntercept = true;
-		} else
-
-		{
-			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
-		}
-
 		boolean isFormula = false;
 
 		for(int i = 0; i < exogNames.size(); i++){
 			String exogName = exogNames.get(i);
 
-			if((i == 0) && (expectIntercept)){
+			if((i == 0) && hasIntercept){
 				interceptMatcher = interceptMatcher.reset(exogName);
 
 				if(interceptMatcher.matches()){
@@ -119,7 +104,7 @@ public class CrossSectionalModel extends Model {
 				} else
 
 				{
-					if(("const").equals(exogName) && (expectIntercept)){
+					if(("const").equals(exogName) && hasIntercept){
 						features.add(new InterceptFeature(encoder, exogName, DataType.STRING));
 					} else
 

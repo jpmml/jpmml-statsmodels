@@ -25,7 +25,6 @@ import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.ModelEncoder;
 import org.jpmml.converter.Schema;
-import org.jpmml.statsmodels.StatsModelsException;
 import statsmodels.CrossSectionalModel;
 
 abstract
@@ -40,7 +39,7 @@ public class RegressionModel extends CrossSectionalModel {
 
 	@Override
 	public org.dmg.pmml.Model encodeModel(List<? extends Number> params, Schema schema){
-		Integer kConstant = getKConstant();
+		boolean hasIntercept = hasIntercept();
 
 		ModelEncoder encoder = schema.getEncoder();
 		Label label = schema.getLabel();
@@ -52,20 +51,12 @@ public class RegressionModel extends CrossSectionalModel {
 		// XXX
 		int kIndex = 0;
 
-		if(kConstant == 0){
-			// Ignored
-		} else
-
-		if(kConstant == 1){
+		if(hasIntercept){
 			intercept = coefficients.remove(kIndex);
 
 			features = dropInterceptFeature(features, kIndex);
 
 			schema = new Schema(encoder, label, features);
-		} else
-
-		{
-			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
 		}
 
 		return encodeModel(coefficients, intercept, schema);

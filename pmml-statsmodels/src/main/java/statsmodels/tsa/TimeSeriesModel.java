@@ -52,21 +52,13 @@ public class TimeSeriesModel extends Model {
 
 	@Override
 	public List<Feature> encodeFeatures(List<String> exogNames, StatsModelsEncoder encoder){
-		Integer kConstant = getKConstant();
+		boolean hasIntercept = hasIntercept();
 
-		if(kConstant == 0){
-			// Ignored
-		} else
-
-		if(kConstant == 1){
+		if(hasIntercept){
 
 			if(!Objects.equals(Collections.singletonList("const"), exogNames)){
 				throw new StatsModelsException("Variable " + ExceptionUtil.formatName("const") + " not in " + ExceptionUtil.formatNameList(exogNames));
 			}
-		} else
-
-		{
-			throw new StatsModelsException("Expected at most one constant term, got " + kConstant);
 		}
 
 		return Collections.emptyList();
