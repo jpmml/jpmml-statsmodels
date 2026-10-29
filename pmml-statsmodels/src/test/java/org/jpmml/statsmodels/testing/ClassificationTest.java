@@ -26,8 +26,28 @@ import org.junit.jupiter.api.Test;
 public class ClassificationTest extends StatsModelsEncoderBatchTest implements Datasets, Fields {
 
 	@Test
+	public void evaluateGLMCLogLogFormulaAudit() throws Exception {
+		evaluate("GLMCLogLogFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+	}
+
+	@Test
 	public void evaluateGLMFormulaAudit() throws Exception {
 		evaluate("GLMFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+	}
+
+	@Test
+	public void evaluateGLMLogCFormulaAudit() throws Exception {
+		evaluate("GLMLogCFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+	}
+
+	@Test
+	public void evaluateGLMLogLogFormulaAudit() throws Exception {
+		evaluate("GLMLogLogFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+	}
+
+	@Test
+	public void evaluateGLMProbitFormulaAudit() throws Exception {
+		evaluate("GLMProbitFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test

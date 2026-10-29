@@ -139,16 +139,38 @@ public class GLM extends RegressionModel {
 	private GeneralRegressionModel.LinkFunction parseLinkFunction(Link link){
 		String linkName = link.getPythonName();
 
+		// StatsModels 0.13.5
 		switch(linkName){
-			// StatsModels 0.13.5
 			case "identity":
-			// StatsModels 0.14.0+
+				return GeneralRegressionModel.LinkFunction.IDENTITY;
+			case "inverse_power":
+				return GeneralRegressionModel.LinkFunction.POWER;
+			case "probit":
+				return GeneralRegressionModel.LinkFunction.PROBIT;
+			case "sqrt":
+				return GeneralRegressionModel.LinkFunction.POWER;
+		}
+
+		// StatsModels 0.14.0+
+		switch(linkName){
+			case "CLogLog":
+				return GeneralRegressionModel.LinkFunction.CLOGLOG;
 			case "Identity":
 				return GeneralRegressionModel.LinkFunction.IDENTITY;
+			case "InversePower":
+				return GeneralRegressionModel.LinkFunction.POWER;
 			case "Log":
 				return GeneralRegressionModel.LinkFunction.LOG;
+			case "LogC":
+				return GeneralRegressionModel.LinkFunction.LOGC;
 			case "Logit":
 				return GeneralRegressionModel.LinkFunction.LOGIT;
+			case "LogLog":
+				return GeneralRegressionModel.LinkFunction.LOGLOG;
+			case "Probit":
+				return GeneralRegressionModel.LinkFunction.PROBIT;
+			case "Sqrt":
+				return GeneralRegressionModel.LinkFunction.POWER;
 			default:
 				throw new StatsModelsException("Link function " + ExceptionUtil.formatParameter(linkName) + " is not supported");
 		}
@@ -158,14 +180,33 @@ public class GLM extends RegressionModel {
 	private Number parseLinkParameter(Link link){
 		String linkName = link.getPythonName();
 
+		// StatsModels 0.13.5
 		switch(linkName){
-			// StatsModels 0.13.5
 			case "identity":
-			// StatsModels 0.14.0+
-			case "Identity":
-			case "Log":
-			case "Logit":
 				return null;
+			case "inverse_power":
+				return link.getPower();
+			case "probit":
+				return null;
+			case "sqrt":
+				return link.getPower();
+		}
+
+		// StatsModels 0.14.0+
+		switch(linkName){
+			case "CLogLog":
+			case "Identity":
+				return null;
+			case "InversePower":
+				return link.getPower();
+			case "Log":
+			case "LogC":
+			case "Logit":
+			case "LogLog":
+			case "Probit":
+				return null;
+			case "Sqrt":
+				return link.getPower();
 			default:
 				throw new StatsModelsException("Link function " + ExceptionUtil.formatParameter(linkName) + " is not supported");
 		}

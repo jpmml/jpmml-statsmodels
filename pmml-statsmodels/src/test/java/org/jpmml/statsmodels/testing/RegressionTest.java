@@ -44,6 +44,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	}
 
 	@Test
+	public void evaluateGLMInversePowerFormulaAuto() throws Exception {
+		evaluate("GLMInversePowerFormula", AUTO);
+	}
+
+	@Test
 	public void evaluateOLSAuto() throws Exception {
 		evaluate("OLS", AUTO);
 	}
@@ -111,6 +116,11 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	@Test
 	public void evaluateGLMFormulaVisit() throws Exception {
 		evaluate("GLMFormula", VISIT);
+	}
+
+	@Test
+	public void evaluateGLMSqrtFormulaVisit() throws Exception {
+		evaluate("GLMSqrtFormula", VISIT);
 	}
 
 	@Test

@@ -3,6 +3,7 @@ from sklearn.preprocessing import KBinsDiscretizer
 from statsmodels.api import GLM, MNLogit, OLS, QuantReg, WLS
 from statsmodels.formula.api import glm, logit, ols, poisson, quantreg, wls
 from statsmodels.genmod.families import Binomial, Gaussian, Poisson
+from statsmodels.genmod.families.links import CLogLog, InversePower, LogC, LogLog, Probit, Sqrt
 from statsmodels.miscmodels.ordinal_model import OrderedModel
 from statsmodels.tools import add_constant
 from statsmodels.tsa.arima.model import ARIMA
@@ -62,6 +63,10 @@ def build_audit(model, name, fit_method = "fit"):
 	store_csv(adjusted_proba, name)
 
 build_audit(glm(formula = audit_formula, data = audit_df, family = Binomial()), "GLMFormulaAudit")
+build_audit(glm(formula = "Adjusted ~ C(Gender) + C(Marital)", data = audit_df, family = Binomial(link = CLogLog())), "GLMCLogLogFormulaAudit")
+build_audit(glm(formula = "Adjusted ~ C(Gender) + C(Marital)", data = audit_df, family = Binomial(link = LogC())), "GLMLogCFormulaAudit")
+build_audit(glm(formula = "Adjusted ~ C(Gender) + C(Marital)", data = audit_df, family = Binomial(link = LogLog())), "GLMLogLogFormulaAudit")
+build_audit(glm(formula = "Adjusted ~ C(Gender) + C(Marital)", data = audit_df, family = Binomial(link = Probit())), "GLMProbitFormulaAudit")
 build_audit(logit(formula = audit_formula, data = audit_df), "LogitFormulaAudit")
 
 build_audit(logit(formula = audit_formula, data = audit_df), "LogitLassoFormulaAudit", fit_method = "fit_regularized")
@@ -113,6 +118,7 @@ build_auto(QuantReg(auto_y, auto_X), "QuantReg95Auto", q = 0.95)
 build_auto(WLS(auto_y, auto_X), "WLSAuto")
 
 build_auto(glm(formula = auto_formula, data = auto_df, family = Gaussian()), "GLMFormulaAuto")
+build_auto(glm(formula = auto_formula, data = auto_df, family = Gaussian(link = InversePower())), "GLMInversePowerFormulaAuto")
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaAuto")
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaUncachedAuto", with_summary = False)
 build_auto(quantreg(formula = auto_formula, data = auto_df), "QuantRegFormula95Auto", q = 0.95)
@@ -165,4 +171,5 @@ def build_visit(model, name, fit_method = "fit"):
 	store_csv(docvis, name)
 
 build_visit(glm(formula = visit_formula, data = visit_df, family = Poisson()), "GLMFormulaVisit")
+build_visit(glm(formula = visit_formula, data = visit_df, family = Poisson(link = Sqrt())), "GLMSqrtFormulaVisit")
 build_visit(poisson(formula = visit_formula, data = visit_df), "PoissonFormulaVisit")

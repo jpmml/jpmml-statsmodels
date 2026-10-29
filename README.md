@@ -13,7 +13,7 @@ Java library and command-line application for converting [StatsModels](https://w
   * Generalized Linear Regression:
     * [Generalized Linear Models](https://www.statsmodels.org/stable/generated/statsmodels.genmod.generalized_linear_model.GLM.html):
       * Families: `Binomial`, `Gaussian`, `Poisson`
-      * Link Functions: `identity`, `Log`, `Logit`
+      * Link Functions: `CLogLog`, `Identity`, `InversePower`, `Log`, `LogC`, `Logit`, `LogLog`, `Probit`, `Sqrt`
   * Regression with Discrete Dependent Variable:
     * [Logit](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Logit.html)
     * [Multinomial Logit](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.MNLogit.html)
