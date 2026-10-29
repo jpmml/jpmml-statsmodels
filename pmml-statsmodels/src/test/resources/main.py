@@ -20,7 +20,7 @@ def split_csv(df):
 def store_csv(df, name):
 	df.to_csv("csv/" + name + ".csv", index = False)
 
-def store_pkl(results, name, remove_data = None):
+def store_pkl(results, name, remove_data = True):
 	if remove_data:
 		remove_data &= hasattr(results, "remove_data")
 	results.save("pkl/" + name + ".pkl", remove_data = remove_data)
@@ -96,19 +96,19 @@ auto_X, auto_y = split_csv(auto_df)
 
 auto_formula = "mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + C(model_year) + C(origin)"
 
-def build_auto(model, name, fit_method = "fit", with_summary = True, **fit_params):
+def build_auto(model, name, fit_method = "fit", with_summary = True, remove_data = True, **fit_params):
 	results = getattr(model, fit_method)(**fit_params)
 	if with_summary:
 		print(results.summary())
 
-	store_pkl(results, name)
+	store_pkl(results, name, remove_data = remove_data)
 
 	mpg = DataFrame(results.predict(auto_X), columns = ["mpg"])
 	store_csv(mpg, name)
 
 build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMAuto")
 build_auto(OLS(auto_y, auto_X), "OLSAuto")
-build_auto(OLS(auto_y, auto_X), "OLSUncachedAuto", with_summary = False)
+build_auto(OLS(auto_y, auto_X), "OLSUncachedAuto", with_summary = False, remove_data = False)
 build_auto(QuantReg(auto_y, auto_X), "QuantReg95Auto", q = 0.95)
 build_auto(WLS(auto_y, auto_X), "WLSAuto")
 
