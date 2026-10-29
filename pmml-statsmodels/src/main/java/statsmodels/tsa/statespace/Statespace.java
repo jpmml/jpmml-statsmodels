@@ -28,10 +28,10 @@ public class Statespace extends CythonObject {
 
 	@Override
 	public void __init__(Object[] args){
-		super.__setstate__(INIT_ATTRBUTES, args);
+		super.__setstate__(INIT_ATTRIBUTES, args);
 	}
 
-	private static final String[] INIT_ATTRBUTES = {
+	private static final String[] INIT_ATTRIBUTES = {
 		"obs",
 		"design",
 		"obs_intercept",

@@ -20,6 +20,7 @@ package statsmodels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,35 +85,33 @@ public class CrossSectionalModel extends Model {
 				}
 			} // End if
 
-			if(i >= 0){
-				binaryIndicatorMatcher = binaryIndicatorMatcher.reset(exogName);
+			binaryIndicatorMatcher = binaryIndicatorMatcher.reset(exogName);
 
-				if(binaryIndicatorMatcher.matches()){
-					String name = binaryIndicatorMatcher.group(1);
-					String value = binaryIndicatorMatcher.group(2);
+			if(binaryIndicatorMatcher.matches()){
+				String name = binaryIndicatorMatcher.group(1);
+				String value = binaryIndicatorMatcher.group(2);
 
-					DataField dataField = encoder.getDataField(name);
-					if(dataField == null){
-						dataField = encoder.createDataField(name, OpType.CATEGORICAL, DataType.STRING);
-					} // End if
+				DataField dataField = encoder.getDataField(name);
+				if(dataField == null){
+					dataField = encoder.createDataField(name, OpType.CATEGORICAL, DataType.STRING);
+				} // End if
 
-					if(!isFormula){
-						FieldUtil.addValue(dataField, value);
-					}
+				if(!isFormula){
+					FieldUtil.addValue(dataField, value);
+				}
 
-					features.add(new BinaryFeature(encoder, dataField, value));
+				features.add(new BinaryFeature(encoder, dataField, value));
+			} else
+
+			{
+				if(Objects.equals("const", exogName) && hasIntercept){
+					features.add(new InterceptFeature(encoder, exogName, DataType.STRING));
 				} else
 
 				{
-					if(("const").equals(exogName) && hasIntercept){
-						features.add(new InterceptFeature(encoder, exogName, DataType.STRING));
-					} else
+					DataField dataField = encoder.createDataField(exogName, OpType.CONTINUOUS, DataType.DOUBLE);
 
-					{
-						DataField dataField = encoder.createDataField(exogName, OpType.CONTINUOUS, DataType.DOUBLE);
-
-						features.add(new ContinuousFeature(encoder, dataField));
-					}
+					features.add(new ContinuousFeature(encoder, dataField));
 				}
 			}
 		}

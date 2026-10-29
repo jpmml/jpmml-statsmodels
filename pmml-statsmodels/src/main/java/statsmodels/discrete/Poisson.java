@@ -20,7 +20,6 @@ package statsmodels.discrete;
 
 import java.util.List;
 
-import org.dmg.pmml.regression.RegressionModel;
 import org.jpmml.converter.Schema;
 import org.jpmml.converter.regression.RegressionModelUtil;
 
@@ -32,6 +31,6 @@ public class Poisson extends CountModel {
 
 	@Override
 	public org.dmg.pmml.regression.RegressionModel encodeModel(List<? extends Number> coefficients, Number intercept, Schema schema){
-		return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, RegressionModel.NormalizationMethod.EXP, schema);
+		return RegressionModelUtil.createRegression(schema.getFeatures(), coefficients, intercept, org.dmg.pmml.regression.RegressionModel.NormalizationMethod.EXP, schema);
 	}
 }
