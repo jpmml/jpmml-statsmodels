@@ -53,10 +53,7 @@ audit_formula = "Adjusted ~ Age + C(Employment) + C(Education) + C(Marital) + C(
 
 def build_audit(model, name, fit_method = "fit"):
 	results = getattr(model, fit_method)()
-	try:
-		print(results.summary())
-	except NotImplementedError:
-		pass
+	print(results.summary())
 
 	store_pkl(results, name)
 
@@ -99,12 +96,10 @@ auto_X, auto_y = split_csv(auto_df)
 
 auto_formula = "mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + C(model_year) + C(origin)"
 
-def build_auto(model, name, fit_method = "fit", **fit_params):
+def build_auto(model, name, fit_method = "fit", with_summary = True, **fit_params):
 	results = getattr(model, fit_method)(**fit_params)
-	try:
+	if with_summary:
 		print(results.summary())
-	except NotImplementedError:
-		pass
 
 	store_pkl(results, name)
 
@@ -113,11 +108,13 @@ def build_auto(model, name, fit_method = "fit", **fit_params):
 
 build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMAuto")
 build_auto(OLS(auto_y, auto_X), "OLSAuto")
+build_auto(OLS(auto_y, auto_X), "OLSUncachedAuto", with_summary = False)
 build_auto(QuantReg(auto_y, auto_X), "QuantReg95Auto", q = 0.95)
 build_auto(WLS(auto_y, auto_X), "WLSAuto")
 
 build_auto(glm(formula = auto_formula, data = auto_df, family = Gaussian()), "GLMFormulaAuto")
 build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaAuto")
+build_auto(ols(formula = auto_formula, data = auto_df), "OLSFormulaUncachedAuto", with_summary = False)
 build_auto(quantreg(formula = auto_formula, data = auto_df), "QuantRegFormula95Auto", q = 0.95)
 build_auto(wls(formula = auto_formula, data = auto_df), "WLSFormulaAuto")
 
@@ -128,9 +125,9 @@ build_auto(OLS(auto_y, auto_X), "OLSConstAuto")
 build_auto(QuantReg(auto_y, auto_X), "QuantReg5Auto", q = 0.05)
 build_auto(WLS(auto_y, auto_X), "WLSConstAuto")
 
-build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMElasticNetAuto", fit_method = "fit_regularized")
-build_auto(OLS(auto_y, auto_X), "OLSElasticNetAuto", fit_method = "fit_regularized")
-build_auto(WLS(auto_y, auto_X), "WLSElasticNetAuto", fit_method = "fit_regularized")
+build_auto(GLM(auto_y, auto_X, family = Gaussian()), "GLMElasticNetAuto", fit_method = "fit_regularized", with_summary = False)
+build_auto(OLS(auto_y, auto_X), "OLSElasticNetAuto", fit_method = "fit_regularized", with_summary = False)
+build_auto(WLS(auto_y, auto_X), "WLSElasticNetAuto", fit_method = "fit_regularized", with_summary = False)
 
 def build_auto_ord(model, name, fit_method = "fit"):
 	results = getattr(model, fit_method)()

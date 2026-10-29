@@ -64,6 +64,16 @@ public class RegressionTest extends StatsModelsEncoderBatchTest implements Datas
 	}
 
 	@Test
+	public void evaluateOLSFormulaUncachedAuto() throws Exception {
+		evaluate("OLSFormulaUncached", AUTO);
+	}
+
+	@Test
+	public void evaluateOLSUncachedAuto() throws Exception {
+		evaluate("OLSUncached", AUTO);
+	}
+
+	@Test
 	public void evaluateQuantReg5Auto() throws Exception {
 		evaluate("QuantReg5", AUTO);
 	}

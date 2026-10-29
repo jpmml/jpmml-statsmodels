@@ -35,22 +35,31 @@ public class ModelData extends PythonObject {
 	}
 
 	public List<String> getEndogNames(){
-		Series origEndog = getOrigEndog();
+		Object origEndog = getOrigEndog();
 
-		String name = origEndog.getName();
+		if(origEndog instanceof Series){
+			Series series = (Series)origEndog;
 
-		return Collections.singletonList(name);
+			String name = series.getName();
+
+			return Collections.singletonList(name);
+		} else
+
+		if(origEndog instanceof DataFrame){
+			DataFrame dataFrame = (DataFrame)origEndog;
+
+			return getColumnNames(dataFrame);
+		} else
+
+		{
+			throw new IllegalArgumentException();
+		}
 	}
 
 	public List<String> getExogNames(){
 		DataFrame origExog = getOrigExog();
 
-		BlockManager data = origExog.getData();
-
-		Index columnAxis = data.getColumnAxis();
-
-		// XXX
-		return (List)columnAxis.getValues();
+		return getColumnNames(origExog);
 	}
 
 	public Cache getCache(){
@@ -62,12 +71,22 @@ public class ModelData extends PythonObject {
 		return cache;
 	}
 
-	public Series getOrigEndog(){
-		return get("orig_endog", Series.class);
+	public Object getOrigEndog(){
+		return getObject("orig_endog");
 	}
 
 	public DataFrame getOrigExog(){
 		return get("orig_exog", DataFrame.class);
+	}
+
+	static
+	private List<String> getColumnNames(DataFrame dataFrame){
+		BlockManager data = dataFrame.getData();
+
+		Index columnAxis = data.getColumnAxis();
+
+		// XXX
+		return (List)columnAxis.getValues();
 	}
 
 	public class Cache extends PythonObject {
