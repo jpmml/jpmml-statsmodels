@@ -77,7 +77,6 @@ public class OrderedModel extends CrossSectionalModel {
 		RVContinuous distr = getDistr();
 		Integer kExtra = getKExtra();
 		Integer kLevels = getKLevels();
-		Number offset = getOffset();
 
 		if(kExtra != (kLevels - 1)){
 			throw new StatsModelsException("Expected " + ExceptionUtil.formatCount(kLevels - 1, "threshold value") + ", got " + kExtra);
@@ -108,7 +107,7 @@ public class OrderedModel extends CrossSectionalModel {
 
 		Schema segmentSchema = schema.toAnonymousRegressorSchema(DataType.DOUBLE);
 
-		RegressionModel firstRegressionModel = RegressionModelUtil.createRegression(features, varsParams, (offset != null ? offset : 0d), RegressionModel.NormalizationMethod.NONE, segmentSchema)
+		RegressionModel firstRegressionModel = RegressionModelUtil.createRegression(features, varsParams, 0d, RegressionModel.NormalizationMethod.NONE, segmentSchema)
 			.setTargets(ModelUtil.createRescaleTargets(-1d, null, segmentSchema.requireContinuousLabel()));
 
 		OutputField linpredOutputField = ModelUtil.createPredictedField("linpred", OpType.CONTINUOUS, DataType.DOUBLE);
@@ -132,10 +131,6 @@ public class OrderedModel extends CrossSectionalModel {
 
 	public List<Number> getLabels(){
 		return getNumberArray("labels");
-	}
-
-	public Number getOffset(){
-		return getOptionalNumber("offset");
 	}
 
 	static
