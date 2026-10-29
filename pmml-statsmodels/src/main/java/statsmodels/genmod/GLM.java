@@ -83,25 +83,20 @@ public class GLM extends RegressionModel {
 
 		Object targetCategory;
 
-		String familyName = family.getPythonName();
-		switch(familyName){
-			case "Binomial":
-				{
-					CategoricalLabel categoricalLabel = (CategoricalLabel)scalarLabel;
+		if(scalarLabel instanceof CategoricalLabel){
+			CategoricalLabel categoricalLabel = (CategoricalLabel)scalarLabel;
 
-					targetCategory = categoricalLabel.getValue(1);
-				}
-				break;
-			case "Gaussian":
-			case "Poisson":
-				{
-					ContinuousLabel continuousLabel = (ContinuousLabel)scalarLabel;
+			targetCategory = categoricalLabel.getValue(1);
+		} else
 
-					targetCategory = null;
-				}
-				break;
-			default:
-				throw new StatsModelsException("Distribution family " + ExceptionUtil.formatParameter(familyName) + " is not supported");
+		if(scalarLabel instanceof ContinuousLabel){
+			ContinuousLabel continuousLabel = (ContinuousLabel)scalarLabel;
+
+			targetCategory = null;
+		} else
+
+		{
+			throw new IllegalArgumentException();
 		}
 
 		GeneralRegressionModel generalRegressionModel = new GeneralRegressionModel(GeneralRegressionModel.ModelType.GENERALIZED_LINEAR, (targetCategory != null ? MiningFunction.CLASSIFICATION : MiningFunction.REGRESSION), ModelUtil.createMiningSchema(scalarLabel), null, null, null)
@@ -111,16 +106,10 @@ public class GLM extends RegressionModel {
 
 		GeneralRegressionModelUtil.encodeRegressionTable(generalRegressionModel, features, coefficients, intercept, targetCategory);
 
-		switch(familyName){
-			case "Binomial":
-				{
-					CategoricalLabel categoricalLabel = (CategoricalLabel)scalarLabel;
+		if(scalarLabel instanceof CategoricalLabel){
+			CategoricalLabel categoricalLabel = (CategoricalLabel)scalarLabel;
 
-					generalRegressionModel.setOutput(ModelUtil.createProbabilityOutput(DataType.DOUBLE, categoricalLabel));
-				}
-				break;
-			default:
-				break;
+			generalRegressionModel.setOutput(ModelUtil.createProbabilityOutput(DataType.DOUBLE, categoricalLabel));
 		}
 
 		return generalRegressionModel;
