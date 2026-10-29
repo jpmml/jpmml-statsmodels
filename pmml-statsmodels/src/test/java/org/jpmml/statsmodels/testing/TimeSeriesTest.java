@@ -37,7 +37,7 @@ import org.jpmml.evaluator.testing.Conflict;
 import org.jpmml.evaluator.time_series.SeriesForecast;
 import org.junit.jupiter.api.Test;
 
-public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
+public class TimeSeriesTest extends StatsModelsEncoderBatchTest implements StatsModelsAlgorithms, StatsModelsDatasets {
 
 	@Override
 	public void evaluate(Batch batch) throws Exception {
@@ -77,7 +77,7 @@ public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
 				String algorithm = getAlgorithm();
 
 				// XXX
-				if(Objects.equals("SSM", algorithm)){
+				if(Objects.equals(SSM, algorithm)){
 					List<Map<String, ?>> rows = Collections.singletonList(Collections.singletonMap("horizon", 12));
 
 					return rows.stream()
@@ -93,6 +93,6 @@ public class TimeSeriesTest extends StatsModelsEncoderBatchTest {
 
 	@Test
 	public void evaluateSSMAirline() throws Exception {
-		evaluate("SSM", "Airline");
+		evaluate(SSM, AIRLINE);
 	}
 }

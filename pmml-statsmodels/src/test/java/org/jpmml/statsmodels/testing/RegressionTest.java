@@ -18,113 +18,112 @@
  */
 package org.jpmml.statsmodels.testing;
 
-import org.jpmml.converter.testing.Datasets;
 import org.junit.jupiter.api.Test;
 
-public class RegressionTest extends StatsModelsEncoderBatchTest implements Datasets {
+public class RegressionTest extends StatsModelsEncoderBatchTest implements StatsModelsAlgorithms, StatsModelsDatasets {
 
 	@Test
 	public void evaluateGLMAuto() throws Exception {
-		evaluate("GLM", AUTO);
+		evaluate(GLM, AUTO);
 	}
 
 	@Test
 	public void evaluateGLMConstAuto() throws Exception {
-		evaluate("GLMConst", AUTO);
+		evaluate(GLM + "Const", AUTO);
 	}
 
 	@Test
 	public void evaluateGLMElasticNetAuto() throws Exception {
-		evaluate("GLMElasticNet", AUTO);
+		evaluate(GLM + "ElasticNet", AUTO);
 	}
 
 	@Test
 	public void evaluateGLMFormulaAuto() throws Exception {
-		evaluate("GLMFormula", AUTO);
+		evaluate(GLM + "Formula", AUTO);
 	}
 
 	@Test
 	public void evaluateGLMInversePowerFormulaAuto() throws Exception {
-		evaluate("GLMInversePowerFormula", AUTO);
+		evaluate(GLM + "InversePowerFormula", AUTO);
 	}
 
 	@Test
 	public void evaluateOLSAuto() throws Exception {
-		evaluate("OLS", AUTO);
+		evaluate(OLS, AUTO);
 	}
 
 	@Test
 	public void evaluateOLSConstAuto() throws Exception {
-		evaluate("OLSConst", AUTO);
+		evaluate(OLS + "Const", AUTO);
 	}
 
 	@Test
 	public void evaluateOLSElasticNetAuto() throws Exception {
-		evaluate("OLSElasticNet", AUTO);
+		evaluate(OLS + "ElasticNet", AUTO);
 	}
 
 	@Test
 	public void evaluateOLSFormulaAuto() throws Exception {
-		evaluate("OLSFormula", AUTO);
+		evaluate(OLS + "Formula", AUTO);
 	}
 
 	@Test
 	public void evaluateOLSFormulaUncachedAuto() throws Exception {
-		evaluate("OLSFormulaUncached", AUTO);
+		evaluate(OLS + "FormulaUncached", AUTO);
 	}
 
 	@Test
 	public void evaluateOLSUncachedAuto() throws Exception {
-		evaluate("OLSUncached", AUTO);
+		evaluate(OLS + "Uncached", AUTO);
 	}
 
 	@Test
 	public void evaluateQuantReg5Auto() throws Exception {
-		evaluate("QuantReg5", AUTO);
+		evaluate(QUANT_REG + "5", AUTO);
 	}
 
 	@Test
 	public void evaluateQuantReg95Auto() throws Exception {
-		evaluate("QuantReg95", AUTO);
+		evaluate(QUANT_REG + "95", AUTO);
 	}
 
 	@Test
 	public void evaluateQuantRegFormula95Auto() throws Exception {
-		evaluate("QuantRegFormula95", AUTO);
+		evaluate(QUANT_REG + "Formula95", AUTO);
 	}
 
 	@Test
 	public void evaluateWLSAuto() throws Exception {
-		evaluate("WLS", AUTO);
+		evaluate(WLS, AUTO);
 	}
 
 	@Test
 	public void evaluateWLSConstAuto() throws Exception {
-		evaluate("WLSConst", AUTO);
+		evaluate(WLS + "Const", AUTO);
 	}
 
 	@Test
 	public void evaluateWLSElasticNetAuto() throws Exception {
-		evaluate("WLSElasticNet", AUTO);
+		evaluate(WLS + "ElasticNet", AUTO);
 	}
 
 	@Test
 	public void evaluateWLSFormulaAuto() throws Exception {
-		evaluate("WLSFormula", AUTO);
+		evaluate(WLS + "Formula", AUTO);
 	}
 
 	@Test
 	public void evaluateGLMFormulaVisit() throws Exception {
-		evaluate("GLMFormula", VISIT);
+		evaluate(GLM + "Formula", VISIT);
 	}
 
 	@Test
 	public void evaluateGLMSqrtFormulaVisit() throws Exception {
-		evaluate("GLMSqrtFormula", VISIT);
+		evaluate(GLM + "SqrtFormula", VISIT);
 	}
 
 	@Test
 	public void evaluatePoissonFormulaVisit() throws Exception {
-		evaluate("PoissonFormula", VISIT);
+		evaluate(POISSON + "Formula", VISIT);
 	}
 }

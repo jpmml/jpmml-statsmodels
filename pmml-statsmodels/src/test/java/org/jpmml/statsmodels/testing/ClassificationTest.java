@@ -18,70 +18,69 @@
  */
 package org.jpmml.statsmodels.testing;
 
-import org.jpmml.converter.testing.Datasets;
 import org.jpmml.converter.testing.Fields;
 import org.jpmml.evaluator.testing.PMMLEquivalence;
 import org.junit.jupiter.api.Test;
 
-public class ClassificationTest extends StatsModelsEncoderBatchTest implements Datasets, Fields {
+public class ClassificationTest extends StatsModelsEncoderBatchTest implements StatsModelsAlgorithms, StatsModelsDatasets, Fields {
 
 	@Test
 	public void evaluateGLMCLogLogFormulaAudit() throws Exception {
-		evaluate("GLMCLogLogFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+		evaluate(GLM + "CLogLogFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test
 	public void evaluateGLMFormulaAudit() throws Exception {
-		evaluate("GLMFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+		evaluate(GLM + "Formula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test
 	public void evaluateGLMLogCFormulaAudit() throws Exception {
-		evaluate("GLMLogCFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+		evaluate(GLM + "LogCFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test
 	public void evaluateGLMLogLogFormulaAudit() throws Exception {
-		evaluate("GLMLogLogFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+		evaluate(GLM + "LogLogFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test
 	public void evaluateGLMProbitFormulaAudit() throws Exception {
-		evaluate("GLMProbitFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+		evaluate(GLM + "ProbitFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test
 	public void evaluateLogitFormulaAudit() throws Exception {
-		evaluate("LogitFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+		evaluate(LOGIT + "Formula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test
 	public void evaluateLogitLassoFormulaAudit() throws Exception {
-		evaluate("LogitLassoFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
+		evaluate(LOGIT + "LassoFormula", AUDIT, excludeFields(AUDIT_ADJUSTED));
 	}
 
 	@Test
 	public void evaluateMNLogitIris() throws Exception {
-		evaluate("MNLogit", IRIS, excludeFields(IRIS_SPECIES));
+		evaluate(MN_LOGIT, IRIS, excludeFields(IRIS_SPECIES));
 	}
 
 	@Test
 	public void evaluateMNLogitConstIris() throws Exception {
-		evaluate("MNLogitConst", IRIS, excludeFields(IRIS_SPECIES));
+		evaluate(MN_LOGIT + "Const", IRIS, excludeFields(IRIS_SPECIES));
 	}
 
 	@Test
 	public void evaluateMNLogitLassoIris() throws Exception {
-		evaluate("MNLogitLasso", IRIS, excludeFields(IRIS_SPECIES));
+		evaluate(MN_LOGIT + "Lasso", IRIS, excludeFields(IRIS_SPECIES));
 	}
 
 	@Test
 	public void evaluateOrderedLogitAuto() throws Exception {
-		evaluate("OrderedLogit", AUTO, excludeFields("y"));
+		evaluate(ORDERED_LOGIT, AUTO, excludeFields("y"));
 	}
 
 	@Test
 	public void evaluateOrderedProbitAuto() throws Exception {
-		evaluate("OrderedProbit", AUTO, excludeFields("y"), new PMMLEquivalence(1e-10, 1e-10));
+		evaluate(ORDERED_PROBIT, AUTO, excludeFields("y"), new PMMLEquivalence(1e-10, 1e-10));
 	}
 }
