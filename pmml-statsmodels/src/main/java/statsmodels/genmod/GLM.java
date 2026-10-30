@@ -141,10 +141,18 @@ public class GLM extends RegressionModel {
 
 		// StatsModels 0.13.5
 		switch(linkName){
+			case "cloglog":
+				return GeneralRegressionModel.LinkFunction.CLOGLOG;
 			case "identity":
 				return GeneralRegressionModel.LinkFunction.IDENTITY;
 			case "inverse_power":
 				return GeneralRegressionModel.LinkFunction.POWER;
+			case "log":
+				return GeneralRegressionModel.LinkFunction.LOG;
+			case "logit":
+				return GeneralRegressionModel.LinkFunction.LOGIT;
+			case "loglog":
+				return GeneralRegressionModel.LinkFunction.LOGLOG;
 			case "probit":
 				return GeneralRegressionModel.LinkFunction.PROBIT;
 			case "sqrt":
@@ -182,10 +190,14 @@ public class GLM extends RegressionModel {
 
 		// StatsModels 0.13.5
 		switch(linkName){
+			case "cloglog":
 			case "identity":
 				return null;
 			case "inverse_power":
 				return link.getPower();
+			case "log":
+			case "logit":
+			case "loglog":
 			case "probit":
 				return null;
 			case "sqrt":

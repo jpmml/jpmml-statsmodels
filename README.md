@@ -28,7 +28,7 @@ Java library and command-line application for converting [StatsModels](https://w
 
 # Prerequisites #
 
-* StatsModels 0.11(.0) or newer
+* StatsModels 0.10(.0) or newer
 * Java 11 or newer
 
 # Installation #
