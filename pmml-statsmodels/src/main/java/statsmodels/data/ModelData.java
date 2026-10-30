@@ -62,6 +62,13 @@ public class ModelData extends PythonObject {
 		return getColumnNames(origExog);
 	}
 
+	public boolean hasOrigData(){
+		Object origEndog = getOptionalObject("orig_endog");
+		Object origExog = getOptionalObject("orig_exog");
+
+		return (origEndog != null) && (origExog != null);
+	}
+
 	public Cache getCache(){
 		Map<String, ?> dict = getDict("_cache");
 

@@ -20,9 +20,11 @@ package statsmodels;
 
 import java.util.List;
 
+import org.jpmml.converter.ExceptionUtil;
 import org.jpmml.converter.Feature;
 import org.jpmml.converter.Label;
 import org.jpmml.converter.Schema;
+import org.jpmml.python.Attribute;
 import org.jpmml.python.PythonObject;
 import org.jpmml.statsmodels.StatsModelsEncoder;
 import org.jpmml.statsmodels.StatsModelsException;
@@ -57,6 +59,17 @@ public class Model extends PythonObject {
 		} else
 
 		{
+			boolean hasOrigData = data.hasOrigData();
+			if(!hasOrigData){
+				ResultsWrapper results = new ResultsWrapper("statsmodels.base.wrapper", "ResultsWrapper");
+
+				Attribute summaryMethod = new Attribute(results, "summary()");
+				Attribute saveMethod = new Attribute(results, "save(fname, remove_data = False)");
+
+				throw new StatsModelsException("The results object does not specify endogenous and exogenous variable names")
+					.setSolution("Call the " + ExceptionUtil.formatName(summaryMethod.format()) + " method to cache variable names before saving, or save using the " + ExceptionUtil.formatName(saveMethod.format()) + " method");
+			}
+
 			endogNames = data.getEndogNames();
 			exogNames = data.getExogNames();
 		}
