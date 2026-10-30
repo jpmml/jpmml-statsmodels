@@ -46,7 +46,7 @@ public class Model extends PythonObject {
 	abstract
 	public org.dmg.pmml.Model encodeModel(Results results, Schema schema);
 
-	public Schema encodeSchema(StatsModelsEncoder encoder){
+	public Schema encodeSchema(Results results, StatsModelsEncoder encoder){
 		ModelData data = getData();
 
 		List<String> endogNames;
@@ -61,8 +61,6 @@ public class Model extends PythonObject {
 		{
 			boolean hasOrigData = data.hasOrigData();
 			if(!hasOrigData){
-				ResultsWrapper results = new ResultsWrapper("statsmodels.base.wrapper", "ResultsWrapper");
-
 				Attribute summaryMethod = new Attribute(results, "summary()");
 				Attribute saveMethod = new Attribute(results, "save(fname, remove_data = False)");
 

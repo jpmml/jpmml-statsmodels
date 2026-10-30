@@ -50,8 +50,8 @@ public class ARIMA extends TimeSeriesModel {
 	}
 
 	@Override
-	public Schema encodeSchema(StatsModelsEncoder encoder){
-		Schema schema = super.encodeSchema(encoder);
+	public Schema encodeSchema(Results results, StatsModelsEncoder encoder){
+		Schema schema = super.encodeSchema(results, encoder);
 
 		@SuppressWarnings("unused")
 		DataField dataField = encoder.createDataField("horizon", OpType.CONTINUOUS, DataType.INTEGER);

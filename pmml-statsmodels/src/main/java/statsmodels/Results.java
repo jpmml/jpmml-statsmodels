@@ -34,7 +34,7 @@ public class Results extends PythonObject {
 	public PMML encodePMML(StatsModelsEncoder encoder){
 		Model model = getModel();
 
-		Schema schema = model.encodeSchema(encoder);
+		Schema schema = model.encodeSchema(this, encoder);
 
 		org.dmg.pmml.Model pmmlModel = encodeModel(schema);
 
