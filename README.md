@@ -26,6 +26,11 @@ Java library and command-line application for converting [StatsModels](https://w
   * Complete test coverage.
   * Fully compliant with the [JPMML-Evaluator](https://github.com/jpmml/jpmml-evaluator) library.
 
+# Prerequisites #
+
+* StatsModels 0.11(.0) or newer
+* Java 11 or newer
+
 # Installation #
 
 Enter the project root directory and build using [Apache Maven](https://maven.apache.org/):
