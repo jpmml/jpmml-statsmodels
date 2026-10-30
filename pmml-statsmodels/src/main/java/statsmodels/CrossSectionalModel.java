@@ -105,7 +105,7 @@ public class CrossSectionalModel extends Model {
 
 			{
 				if(Objects.equals("const", exogName) && hasIntercept){
-					features.add(new InterceptFeature(encoder, exogName, DataType.STRING));
+					features.add(new InterceptFeature(encoder, exogName, DataType.DOUBLE));
 				} else
 
 				{
